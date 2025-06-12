@@ -18,6 +18,36 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\header\ActionMovie.h" />
+    <ClInclude Include="Core\header\DocumentaryMovie.h" />
+    <ClInclude Include="Core\header\DramaMovie.h" />
+    <ClInclude Include="Core\header\Hall.h" />
+    <ClInclude Include="Core\header\Movie.h" />
+    <ClInclude Include="Core\header\Ticket.h" />
+    <ClInclude Include="Helpers\header\Date.h" />
+    <ClInclude Include="Helpers\header\MyString.h" />
+    <ClInclude Include="Helpers\header\MyVector.hpp" />
+    <ClInclude Include="Helpers\header\Time.h" />
+    <ClInclude Include="Helpers\header\Utilities.h" />
+    <ClInclude Include="User\header\Catalogue.h" />
+    <ClInclude Include="User\header\User.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Cinema-Management-System.cpp" />
+    <ClCompile Include="Core\source\ActionMovie.cpp" />
+    <ClCompile Include="Core\source\DocumentaryMovie.cpp" />
+    <ClCompile Include="Core\source\DramaMovie.cpp" />
+    <ClCompile Include="Core\source\Hall.cpp" />
+    <ClCompile Include="Core\source\Movie.cpp" />
+    <ClCompile Include="Core\source\Ticket.cpp" />
+    <ClCompile Include="Helpers\source\Date.cpp" />
+    <ClCompile Include="Helpers\source\MyString.cpp" />
+    <ClCompile Include="Helpers\source\Time.cpp" />
+    <ClCompile Include="Helpers\source\Utilities.cpp" />
+    <ClCompile Include="User\source\Catalogue.cpp" />
+    <ClCompile Include="User\source\User.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -126,9 +156,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Cinema-Management-System.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

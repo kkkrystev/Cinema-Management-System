@@ -1,0 +1,25 @@
+﻿  Cinema-Management-System.cpp
+  ActionMovie.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Core\source\ActionMovie.cpp(1,10): error C1083: Cannot open include file: 'ActionMovie.h': No such file or directory
+  DocumentaryMovie.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Core\source\DocumentaryMovie.cpp(1,10): error C1083: Cannot open include file: 'DocumentaryMovie.h': No such file or directory
+  DramaMovie.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Core\source\DramaMovie.cpp(1,10): error C1083: Cannot open include file: 'DramaMovie.h': No such file or directory
+  Hall.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Core\source\Hall.cpp(1,10): error C1083: Cannot open include file: 'Hall.h': No such file or directory
+  Movie.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Core\source\Movie.cpp(1,10): error C1083: Cannot open include file: 'Movie.h': No such file or directory
+  Ticket.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Core\source\Ticket.cpp(1,10): error C1083: Cannot open include file: 'Ticket.h': No such file or directory
+  Date.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Helpers\source\Date.cpp(1,10): error C1083: Cannot open include file: 'Date.h': No such file or directory
+  MyString.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Helpers\source\MyString.cpp(4,10): error C1083: Cannot open include file: 'Helpers/header/MyString.h': No such file or directory
+  Time.cpp
+  Utilities.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\Helpers\source\Utilities.cpp(1,10): error C1083: Cannot open include file: 'Utilities.h': No such file or directory
+  Catalogue.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\User\source\Catalogue.cpp(1,10): error C1083: Cannot open include file: 'Catalogue.h': No such file or directory
+  User.cpp
+C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\Cinema-Management-System\User\source\User.cpp(1,10): error C1083: Cannot open include file: 'User/header/User.h': No such file or directory
+  Generating Code...

@@ -30,6 +30,12 @@
     <Filter Include="Source Files\User">
       <UniqueIdentifier>{e6cf4c0b-b74a-42ee-b72a-f5074fa38254}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{0bd31011-38c9-4b5d-b485-2327c3b70e89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{67509d17-a39e-46db-bf7d-9e48ba38182a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\header\ActionMovie.h">
@@ -71,6 +77,21 @@
     <ClInclude Include="Core\header\Movie.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="User\header\Admin.h">
+      <Filter>Header Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="User\header\RegularUser.h">
+      <Filter>Header Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\TimeInterval.h">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\header\System.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\PolymorphicPtr.hpp">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\source\ActionMovie.cpp">
@@ -111,6 +132,18 @@
     </ClCompile>
     <ClCompile Include="Cinema-Management-System.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\source\Admin.cpp">
+      <Filter>Source Files\User</Filter>
+    </ClCompile>
+    <ClCompile Include="User\source\RegularUser.cpp">
+      <Filter>Source Files\User</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\source\TimeInterval.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="System\source\System.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

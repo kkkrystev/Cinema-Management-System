@@ -8,10 +8,12 @@ public:
 	int getHour() const;
 	int getMinutes() const;
 
-	void setHour();
-	void setMinutes();
-
-	// override necessary operators for comparision
+	friend bool operator<(const Time& lhs, const Time& rhs);
+	friend bool operator>(const Time& lhs, const Time& rhs);
+	friend bool operator==(const Time& lhs, const Time& rhs);
+	friend bool operator!=(const Time& lhs, const Time& rhs);
+	friend bool operator<=(const Time& lhs, const Time& rhs);
+	friend bool operator>=(const Time& lhs, const Time& rhs);
 
 private:
 	int hour, minutes;

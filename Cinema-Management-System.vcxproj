@@ -28,9 +28,14 @@
     <ClInclude Include="Helpers\header\Date.h" />
     <ClInclude Include="Helpers\header\MyString.h" />
     <ClInclude Include="Helpers\header\MyVector.hpp" />
+    <ClInclude Include="Helpers\header\PolymorphicPtr.hpp" />
     <ClInclude Include="Helpers\header\Time.h" />
+    <ClInclude Include="Helpers\header\TimeInterval.h" />
     <ClInclude Include="Helpers\header\Utilities.h" />
+    <ClInclude Include="System\header\System.h" />
+    <ClInclude Include="User\header\Admin.h" />
     <ClInclude Include="User\header\Catalogue.h" />
+    <ClInclude Include="User\header\RegularUser.h" />
     <ClInclude Include="User\header\User.h" />
   </ItemGroup>
   <ItemGroup>
@@ -44,8 +49,12 @@
     <ClCompile Include="Helpers\source\Date.cpp" />
     <ClCompile Include="Helpers\source\MyString.cpp" />
     <ClCompile Include="Helpers\source\Time.cpp" />
+    <ClCompile Include="Helpers\source\TimeInterval.cpp" />
     <ClCompile Include="Helpers\source\Utilities.cpp" />
+    <ClCompile Include="System\source\System.cpp" />
+    <ClCompile Include="User\source\Admin.cpp" />
     <ClCompile Include="User\source\Catalogue.cpp" />
+    <ClCompile Include="User\source\RegularUser.cpp" />
     <ClCompile Include="User\source\User.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -134,6 +143,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

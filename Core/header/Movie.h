@@ -1,7 +1,7 @@
 #pragma once
-#include "Date.h"
-#include "Time.h"
-#include "MyString.h"
+#include "Helpers/header/Date.h"
+#include "Helpers/header/MyString.h"
+#include "Helpers/header/TimeInterval.h"
 
 enum class Genre {
 	Action,
@@ -12,14 +12,8 @@ enum class Genre {
 class Movie
 {
 public:
-	Movie();
+	Movie(const MyString& title, int releaseYear, int duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours);
 	virtual ~Movie() = default;
-
-	void setHallId(int hallId);
-	void setTitle(const MyString& title);
-	void setReleaseYear(int releaseYear);
-	void setDuration(int duration);
-	void setRating(double rating);
 
 	int getMovieId() const;
 	int getHallId() const;
@@ -32,15 +26,15 @@ public:
 	virtual double getTicketPrice() const = 0;
 
 protected:
-	int movieId;
-	int hallId;
+	static int s_nextId;
+	int id;
 
 	MyString title;
 	int releaseYear;
 	int duration; // in minutes
-	double rating;
-
+	int hallId;
 	Date screeningDate;
-	Time startHour;
-	Time endHour;
+	TimeInterval screeningHours;
+
+	double rating;
 };

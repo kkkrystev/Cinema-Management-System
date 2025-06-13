@@ -1,10 +1,10 @@
 #pragma once
-#include "Movie.h"
+#include "Core/header/Movie.h"
 
 class ActionMovie : public Movie
 {
 public:
-	ActionMovie();
+	ActionMovie(const MyString& title, int releaseYear, int duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours, unsigned actionIntensity);
 	
 	Genre getGenre() const override;
 	double getTicketPrice() const override;

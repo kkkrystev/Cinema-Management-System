@@ -25,7 +25,7 @@ public:
 private:
 	int hallId;
 
-	bool* seats;
+	bool** seats;
 	int rows;
 	int cols;
 

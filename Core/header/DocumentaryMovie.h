@@ -1,5 +1,5 @@
 #pragma once
-#include "Movie.h"
+#include "Core/header/Movie.h"
 
 enum class Theme {
 	Nature,
@@ -10,7 +10,8 @@ enum class Theme {
 class DocumentaryMovie : public Movie
 {
 public:
-	DocumentaryMovie();
+	DocumentaryMovie(const MyString& title, int releaseYear, int duration, int hallId, 
+		const Date& screeningDate, const TimeInterval& screeningHours, Theme theme, bool isBasedOnTrueEvents);
 
 	Genre getGenre() const override;
 	double getTicketPrice() const override;

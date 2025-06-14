@@ -1,4 +1,4 @@
-#include "TimeInterval.h"
+#include "Helpers/header/TimeInterval.h"
 
 bool doIntervalsOverlap(const TimeInterval& lhs, const TimeInterval& rhs)
 {

@@ -39,7 +39,7 @@
     <ClInclude Include="User\header\User.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Cinema-Management-System.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Core\source\ActionMovie.cpp" />
     <ClCompile Include="Core\source\DocumentaryMovie.cpp" />
     <ClCompile Include="Core\source\DramaMovie.cpp" />

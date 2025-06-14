@@ -19,6 +19,8 @@ public:
 	T& operator*();
 	const T& operator*() const;
 
+	operator bool() const;
+
 	T* get();
 	const T* get() const;
 
@@ -89,6 +91,12 @@ T& PolymorphicPtr<T>::operator*() {
 template<typename T>
 const T& PolymorphicPtr<T>::operator*() const {
 	return *ptr;
+}
+
+template<typename T>
+PolymorphicPtr<T>::operator bool() const
+{
+	return ptr != nullptr;
 }
 
 template<typename T>

@@ -15,12 +15,13 @@ public:
 	Movie(const MyString& title, int releaseYear, int duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours);
 	virtual ~Movie() = default;
 
-	int getMovieId() const;
+	int getId() const;
 	int getHallId() const;
-	const MyString& getTile() const;
-	double getRating() const;
-	int getDuration() const;
-	int getReleaseYear() const;
+	const MyString& getTitle() const;
+	const Date& getScreeningDate() const;
+	const TimeInterval& getScreeningHours() const;
+
+	void addToRating(int rating);
 
 	virtual Genre getGenre() const = 0;
 	virtual double getTicketPrice() const = 0;
@@ -36,5 +37,6 @@ protected:
 	Date screeningDate;
 	TimeInterval screeningHours;
 
-	double rating;
+	double averageRating;
+	size_t ratingsCount;
 };

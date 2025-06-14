@@ -130,7 +130,7 @@
     <ClCompile Include="User\source\User.cpp">
       <Filter>Source Files\User</Filter>
     </ClCompile>
-    <ClCompile Include="Cinema-Management-System.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="User\source\Admin.cpp">

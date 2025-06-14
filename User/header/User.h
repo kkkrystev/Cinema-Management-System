@@ -2,12 +2,7 @@
 #include "Helpers/header/MyString.h"
 #include "Helpers/header/MyVector.hpp"
 #include "Core/header/Ticket.h"
-#include "User/header/Catalogue.h"
-
-enum class Role {
-	Admin,
-	Regular
-};
+#include "Helpers/header/Utilities.h"
 
 class User
 {
@@ -18,6 +13,18 @@ public:
 	virtual User* clone() const = 0;
 	virtual Role getRole() const = 0;
 
+	int getId() const;
+	const MyString& getName() const;
+	const MyString& getPassword() const;
+
+	void addBalance(double sum);
+
+	void buyTicket(const Ticket& ticket, double price);
+	void removeTickets(int movieId);
+
+	void addToCatalogue(int movieId);
+	void removeFromCatalogue(int movieId);
+
 private:
 	static int s_nextId;
 	int id;
@@ -27,6 +34,6 @@ private:
 
 	double balance;
 	MyVector<Ticket> tickets;
-	Catalogue catalogue;
+	MyVector<int> catalogue;
 };
 

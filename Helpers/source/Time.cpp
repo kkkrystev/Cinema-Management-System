@@ -1,6 +1,15 @@
 #include "Helpers/header/Time.h"
+#include <ctime>
 
-Time::Time() : hour(-1), minutes(-1) {}
+Time::Time() 
+{
+	time_t now = time(0);
+	tm local;
+	localtime_s(&local, &now);
+
+	hour = local.tm_hour;
+	minutes = local.tm_min;
+}
 Time::Time(int hour, int minutes) : hour(hour), minutes(minutes) {}
 
 int Time::getHour() const

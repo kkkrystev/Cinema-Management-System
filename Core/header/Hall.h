@@ -3,31 +3,33 @@ class Hall
 {
 public:
 	Hall();
-	Hall(int rows, int cols);
+	Hall(size_t rows, size_t cols);
 
 	Hall(const Hall& other);
 	Hall(Hall&& other);
 
 	Hall& operator=(const Hall& other);
-	Hall& operator=(Hall& other);
+	Hall& operator=(Hall&& other);
 
 	~Hall();
 
 	int getId() const;
-	int getRows() const;
-	int getCols() const;
+	size_t getRows() const;
+	size_t getCols() const;
 
-	void reserveSeat(int row, int col);
-	void freeSeat(int row, int col);
+	bool isSeatTaken(size_t row, size_t col);
+	void reserveSeat(size_t row, size_t col);
+	void freeSeat(size_t row, size_t col);
 
 	void printLayout() const;
 
 private:
-	int hallId;
+	static int s_nextId;
+	int id;
 
 	bool** seats;
-	int rows;
-	int cols;
+	size_t rows;
+	size_t cols;
 
 	void free();
 	void copyFrom(const Hall& other);

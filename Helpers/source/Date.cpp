@@ -2,7 +2,16 @@
 #include <stdexcept>
 #include <ctime>
 
-Date::Date() : day(-1), month(-1), year(-1) {}
+Date::Date() 
+{
+    time_t now = time(0);
+    tm local;
+    localtime_s(&local, &now);
+
+    day = local.tm_mday;
+    month = local.tm_mon + 1;
+    year = local.tm_year + 1900;
+}
 Date::Date(int day, int month, int year)
 {
     if (!isValid(day, month, year))
@@ -80,4 +89,31 @@ bool operator<(const Date& lhs, const Date& rhs)
     if (lhs.month > rhs.month) return false;
 
     return lhs.day < rhs.day;
+}
+
+bool operator>(const Date& lhs, const Date& rhs)
+{
+    return rhs < lhs;
+}
+
+bool operator==(const Date& lhs, const Date& rhs)
+{
+    return lhs.year == rhs.year &&
+        lhs.month == rhs.month &&
+        lhs.day == rhs.day;
+}
+
+bool operator!=(const Date& lhs, const Date& rhs)
+{
+    return !(lhs == rhs);
+}
+
+bool operator<=(const Date& lhs, const Date& rhs)
+{
+    return !(rhs < lhs);
+}
+
+bool operator>=(const Date& lhs, const Date& rhs)
+{
+    return !(lhs < rhs);
 }

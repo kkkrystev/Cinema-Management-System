@@ -12,6 +12,11 @@ public:
     bool isPast() const;
 
     friend bool operator<(const Date& lhs, const Date& rhs);
+    friend bool operator>(const Date& lhs, const Date& rhs);
+    friend bool operator==(const Date& lhs, const Date& rhs);
+    friend bool operator!=(const Date& lhs, const Date& rhs);
+    friend bool operator<=(const Date& lhs, const Date& rhs);
+    friend bool operator>=(const Date& lhs, const Date& rhs);
 
 private:
 	int day, month, year;

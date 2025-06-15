@@ -1,4 +1,6 @@
 #pragma once
+#include <fstream>
+
 class Hall
 {
 public:
@@ -16,6 +18,11 @@ public:
 	int getId() const;
 	size_t getRows() const;
 	size_t getCols() const;
+
+	static void setNextId(int nextId);
+
+	void saveToBinaryFile(std::ofstream& ofs) const;
+	void loadFromBinaryFile(std::ifstream& ifs);
 
 	bool isSeatTaken(size_t row, size_t col);
 	void reserveSeat(size_t row, size_t col);

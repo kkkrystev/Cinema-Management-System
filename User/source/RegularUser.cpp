@@ -1,5 +1,6 @@
 #include "User/header/RegularUser.h"
 
+RegularUser::RegularUser() : User() {}
 RegularUser::RegularUser(const MyString& name, const MyString& password) : User(name, password) {}
 
 User* RegularUser::clone() const

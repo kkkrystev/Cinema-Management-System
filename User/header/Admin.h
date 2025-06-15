@@ -12,6 +12,5 @@ public:
 private:
 	static const MyString ADMMIN_NAME;
 	static const MyString ADMIN_PASSWORD;
-	static const double ADMIN_BALANCE;
 };
 

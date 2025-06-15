@@ -1,15 +1,23 @@
 #pragma once
+#include <fstream>
+
 class Date
 {
 public:
     Date();
-    Date(unsigned day, unsigned month, unsigned year);
+    Date(int day, int month, int year);
 
-    unsigned getDay() const;
-    unsigned getMonth() const;
-    unsigned getYear() const;
+    int getDay() const;
+    int getMonth() const;
+    int getYear() const;
 
     bool isPast() const;
+
+    void saveToBinaryFile(std::ofstream& ofs) const;
+    void loadFromBinaryFile(std::ifstream& ifs);
+
+    friend std::ostream& operator<<(std::ostream& os, const Date& date);
+    friend std::istream& operator>>(std::istream& is, Date& date);
 
     friend bool operator<(const Date& lhs, const Date& rhs);
     friend bool operator>(const Date& lhs, const Date& rhs);
@@ -19,10 +27,10 @@ public:
     friend bool operator>=(const Date& lhs, const Date& rhs);
 
 private:
-    unsigned day, month, year;
-    
-    static bool isPast(unsigned day, unsigned month, unsigned year);
-    static bool isValid(unsigned day, unsigned month, unsigned year);
-    static bool isLeapYear(unsigned year);
+    int day, month, year;
+
+    static bool isPast(int day, int month, int year);
+    static bool isValid(int day, int month, int year);
+    static bool isLeapYear(int year);
 };
 

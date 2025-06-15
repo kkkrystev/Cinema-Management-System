@@ -23,7 +23,7 @@ public:
 	void logout();
 	void addBalance(double sum);
 	void buyTicket(int movieId, int row, int col);
-	void rateMovie(int movieId, int rating);
+	void rateMovie(int movieId, unsigned rating);
 	void listMovies() const;
 	void listTickets() const;
 
@@ -33,11 +33,10 @@ public:
 	void addDramaMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, bool hasComedyElements);
 	void removeMovie(int movieId);
 	void removeUser(int userId);
-
+	void openHall(int rows, int cols);
+	void closeHall(int hallId);
 	void updateMovieTitle(int movieId, const MyString& newTitle);
-	void openHaul(int rows, int cols);
-	void closeHaul(int haulId);
-	void updateMovieHaul(int movieId, int newHaulId);
+	void updateMovieHall(int movieId, int newHallId);
 	void listUserHistory(int userId) const;
 	void listUserTickets(int userId) const;
 	void listUsers() const;
@@ -50,11 +49,18 @@ private:
 	PolymorphicPtr<User> loggedIn;
 
 	System();
-
 	System(const System&) = delete;
 	System& operator=(const System&) = delete;
 	System(System&&) = delete;
 	System& operator=(System&&) = delete;
+
+	// Save & load 
+	void saveUsers() const;
+	void saveMovies() const;
+	void saveHalls() const;
+	void loadUsers();
+	void loadMovies();
+	void loadHalls();
 
 	// Finders
 	PolymorphicPtr<User> findUserById(int id);

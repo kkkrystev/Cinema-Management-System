@@ -2,18 +2,22 @@
 #include "Helpers/header/Date.h"
 #include "Helpers/header/MyString.h"
 #include "Helpers/header/TimeInterval.h"
-
-enum class Genre {
-	Action,
-	Drama,
-	Documentary
-};
+#include "Helpers/header/Utilities.h"
 
 class Movie
 {
 public:
+	Movie();
 	Movie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours);
 	virtual ~Movie() = default;
+
+	virtual Movie* clone() const = 0;
+	virtual Genre getGenre() const = 0;
+	virtual double getTicketPrice() const = 0;
+	virtual void printInfo() const;
+
+	virtual void saveToBinaryFile(std::ofstream& ofs) const;
+	virtual void loadFromBinaryFile(std::ifstream& ifs);
 
 	int getId() const;
 	int getHallId() const;
@@ -21,10 +25,11 @@ public:
 	const Date& getScreeningDate() const;
 	const TimeInterval& getScreeningHours() const;
 
-	void addToRating(int rating);
+	void setHallId(int hallId);
+	void setTitle(const MyString& title);
+	static void setNextId(int nextId);
 
-	virtual Genre getGenre() const = 0;
-	virtual double getTicketPrice() const = 0;
+	void addToRating(unsigned rating);
 
 protected:
 	static int s_nextId;

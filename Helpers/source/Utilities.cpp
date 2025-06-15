@@ -1,12 +1,13 @@
 #include "Helpers/header/Utilities.h"
+#include <fstream>;
 
-bool validateName(const MyString& name)
+size_t getFileSize(std::ifstream& file)
 {
-	return true;
-}
-bool validatePassword(const MyString& password)
-{
-	return true;
+	size_t currPos = file.tellg();
+	file.seekg(0, std::ios::end);
+	size_t fileSize = file.tellg();
+	file.seekg(currPos);
+	return fileSize;
 }
 
 MyString roleToString(Role role)
@@ -25,5 +26,28 @@ MyString themeToString(Theme theme)
 	case Theme::History			: return MyString("History");
 	case Theme::HistoricalFigure: return MyString("HistoricalFigure");
 	default						: return MyString("Unknown");
+	}
+}
+
+Genre stringToGenre(const MyString& genreStr)
+{
+	if (genreStr == "Action" || genreStr == "action")				 return Genre::Action;
+	else if (genreStr == "Drama" || genreStr == "drama")			 return Genre::Drama;
+	else if (genreStr == "Documentary" || genreStr == "documentary") return Genre::Documentary;
+}
+
+Theme stringToTheme(const MyString& themeStr)
+{
+	if (themeStr == "nature" || themeStr == "Nature") {
+		return Theme::Nature;
+	}
+	else if (themeStr == "history" || themeStr == "History") {
+		return Theme::History;
+	}
+	else if (themeStr == "historical-figure" || themeStr == "Historical-figure") {
+		return Theme::HistoricalFigure;
+	}
+	else {
+		return Theme::Unknown;
 	}
 }

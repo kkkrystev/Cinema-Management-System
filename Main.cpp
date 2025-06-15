@@ -1,7 +1,5 @@
-﻿#include <iostream>
+#include "System/header/SystemLauncher.h"
 
-int main()
-{
-    std::cout << "Hello World!\n";
+int main() {
+	SystemLauncher::run();
 }
-

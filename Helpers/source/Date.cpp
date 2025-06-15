@@ -12,7 +12,7 @@ Date::Date()
     month = local.tm_mon + 1;
     year = local.tm_year + 1900;
 }
-Date::Date(unsigned day, unsigned month, unsigned year)
+Date::Date(int day, int month, int year)
 {
     if (!isValid(day, month, year))
         throw std::invalid_argument("Invalid date provided");
@@ -22,25 +22,39 @@ Date::Date(unsigned day, unsigned month, unsigned year)
     this->year = year;
 }
 
-unsigned Date::getDay() const
+int Date::getDay() const
 {
     return day;
 }
-unsigned Date::getMonth() const
+int Date::getMonth() const
 {
     return month;
 }
-unsigned Date::getYear() const
+int Date::getYear() const
 {
     return month;
 }
 
 bool Date::isPast() const
 {
-    isPast(day, month, year);
+    return isPast(day, month, year);
 }
 
-bool Date::isPast(unsigned day, unsigned month, unsigned year)
+void Date::saveToBinaryFile(std::ofstream& ofs) const
+{
+    ofs.write((const char*)&day, sizeof(day));
+    ofs.write((const char*)&month, sizeof(month));
+    ofs.write((const char*)&year, sizeof(year));
+}
+
+void Date::loadFromBinaryFile(std::ifstream& ifs)
+{
+    ifs.read((char*)&day, sizeof(day));
+    ifs.read((char*)&month, sizeof(month));
+    ifs.read((char*)&year, sizeof(year));
+}
+
+bool Date::isPast(int day, int month, int year)
 {
     time_t now = time(0);
     tm local;
@@ -56,23 +70,50 @@ bool Date::isPast(unsigned day, unsigned month, unsigned year)
 
     return false;
 }
-bool Date::isValid(unsigned day, unsigned month, unsigned year)
+bool Date::isValid(int day, int month, int year)
 {
-    if (year < 0 || month < 1 || month > 12 || day < 1)
+    if (month < 0 || day < 0 || year < 0 || month < 1 || month > 12 || day < 1)
         return false;
 
-    unsigned daysInMonth[] = { 31, 28, 31, 30, 31, 30,
-                          31, 31, 30, 31, 30, 31 };
+    int daysInMonth[] = { 31, 28, 31, 30, 31, 30,
+                               31, 31, 30, 31, 30, 31 };
 
-    if (isLeapYear(year))
-        daysInMonth[1] = 29;
+    if (isLeapYear(year)) daysInMonth[1] = 29;
 
     return day <= daysInMonth[month - 1];
 
 }
-bool Date::isLeapYear(unsigned year)
+bool Date::isLeapYear(int year)
 {
 	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+std::ostream& operator<<(std::ostream& os, const Date& date)
+{
+    if (date.day < 10) os << '0';
+    os << date.day << '-';
+
+    if (date.month < 10) os << '0';
+    os << date.month << '-';
+
+    os << date.year;
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, Date& date)
+{
+    unsigned d, m, y;
+    char dash1, dash2;
+    if (is >> d >> dash1 >> m >> dash2 >> y && dash1 == '-' && dash2 == '-')
+    {
+        if (Date::isValid(d, m, y))
+            date = Date(d, m, y);
+        else
+            date = Date(-1, -1, -1);
+    }
+    else
+        date = Date();
+    return is;
 }
 
 bool operator<(const Date& lhs, const Date& rhs)

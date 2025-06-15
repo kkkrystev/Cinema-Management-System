@@ -8,19 +8,25 @@ namespace Constants {
 	const unsigned MAX_ACTION_INTENSITY = 20;
 }
 
-bool validateName(const MyString& name);
-bool validatePassword(const MyString& name);
+size_t getFileSize(std::ifstream& file);
 
 enum class Role {
 	Admin,
 	Regular
 };
-
+enum class Genre {
+	Action,
+	Drama,
+	Documentary
+};
 enum class Theme {
 	Nature,
 	History,
-	HistoricalFigure
+	HistoricalFigure,
+	Unknown
 };
 
 MyString roleToString(Role role);
 MyString themeToString(Theme theme);
+Genre stringToGenre(const MyString& genreStr);
+Theme stringToTheme(const MyString& themeStr);

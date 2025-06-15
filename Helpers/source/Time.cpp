@@ -11,7 +11,7 @@ Time::Time()
 	hour = local.tm_hour;
 	minutes = local.tm_min;
 }
-Time::Time(unsigned hour, unsigned minutes) 
+Time::Time(int hour, int minutes)
 {
 	if (!isValid(hour, minutes))
 		throw std::invalid_argument("Invalid time provided");
@@ -20,26 +20,60 @@ Time::Time(unsigned hour, unsigned minutes)
 	this->minutes = minutes;
 }
 
-unsigned Time::getHour() const
+int Time::getHour() const
 {
 	return hour;
 }
-unsigned Time::getMinutes() const
+int Time::getMinutes() const
 {
 	return minutes;
 }
-
-unsigned Time::toMinutes() const
+int Time::toMinutes() const
 {
 	return hour * 60 + minutes;
 }
 
+void Time::saveToBinaryFile(std::ofstream& ofs) const
+{
+	ofs.write((const char*)&hour, sizeof(hour));
+	ofs.write((const char*)&minutes, sizeof(minutes));
+}
+
+void Time::loadFromBinaryFile(std::ifstream& ifs)
+{
+	ifs.read((char*)&hour, sizeof(hour));
+	ifs.read((char*)&minutes, sizeof(minutes));
+}
+
 bool Time::isValid(unsigned hour, unsigned minutes)
 {
-	if (hour > 23) return false;
-	if (minutes > 59) return false;
+	if (hour > 23 || hour < 0) return false;
+	if (minutes > 59 || minutes < 0) return false;
 	return true;
 }
+
+std::ostream& operator<<(std::ostream& os, const Time& time)
+{
+	if (time.hour < 10) os << '0';
+	os << time.hour << ':';
+
+	if (time.minutes < 10) os << '0';
+	os << time.minutes;
+
+	return os;
+}
+
+std::istream& operator>>(std::istream& is, Time& time)
+{
+	int h, m;
+	char seperator;
+	if (is >> h >> seperator >> m && seperator == ':' && Time::isValid(h, m))
+		time = Time(h, m);
+	else
+		time = Time(-1, -1);
+	return is;
+}
+
 
 bool operator<(const Time& lhs, const Time& rhs)
 {

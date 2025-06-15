@@ -7,6 +7,7 @@
 class User
 {
 public:
+	User();
 	User(const MyString& name, const MyString& password);
 	virtual ~User() = default;
 
@@ -16,6 +17,11 @@ public:
 	int getId() const;
 	const MyString& getName() const;
 	const MyString& getPassword() const;
+
+	static void setNextId(int nextId);
+
+	void saveToBinaryFile(std::ofstream& ofs) const;
+	void loadFromBinaryFile(std::ifstream& ifs);
 
 	bool hasTicket(int movieId) const;
 	bool isInCatalogue(int movieId) const;
@@ -27,7 +33,7 @@ public:
 	void addToCatalogue(int movieId);
 	void removeFromCatalogue(int movieId);
 
-private:
+protected:
 	static int s_nextId;
 	int id;
 

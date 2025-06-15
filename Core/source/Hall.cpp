@@ -95,6 +95,36 @@ size_t Hall::getCols() const
 	return cols;
 }
 
+void Hall::setNextId(int nextId)
+{
+	s_nextId = nextId;
+}
+
+void Hall::saveToBinaryFile(std::ofstream& ofs) const
+{
+	ofs.write((const char*)&id, sizeof(id));
+	ofs.write((const char*)&rows, sizeof(rows));
+	ofs.write((const char*)&cols, sizeof(cols));
+
+	for (size_t i = 0; i < rows; i++) {
+		ofs.write((const char*)seats[i], sizeof(bool) * cols);
+	}
+}
+
+void Hall::loadFromBinaryFile(std::ifstream& ifs)
+{
+	ifs.read((char*)&id, sizeof(id));
+	ifs.read((char*)&rows, sizeof(rows));
+	ifs.read((char*)&cols, sizeof(cols));
+
+	free();
+	seats = new bool* [rows];
+	for (size_t i = 0; i < rows; i++) {
+		seats[i] = new bool[cols];
+		ifs.read((char*)seats[i], sizeof(bool) * cols);
+	}
+}
+
 bool Hall::isSeatTaken(size_t row, size_t col)
 {
 	if (row >= rows || col >= cols)

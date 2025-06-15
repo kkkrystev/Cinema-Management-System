@@ -18,11 +18,25 @@ const MyString& User::getPassword() const
     return password;
 }
 
+bool User::hasTicket(int movieId) const
+{
+    for (size_t i = 0; i < tickets.getSize(); i++) {
+        if (tickets[i].getMovieId() == movieId) return true;
+    }
+    return false;
+}
+bool User::isInCatalogue(int movieId) const
+{
+    for (size_t i = 0; i < catalogue.getSize(); i++) {
+        if (catalogue[i] == movieId) return true;
+    }
+    return false;
+}
+
 void User::addBalance(double sum)
 {
     balance += sum;
 }
-
 void User::buyTicket(const Ticket& ticket, double price)
 {
     if (balance < price)
@@ -30,6 +44,16 @@ void User::buyTicket(const Ticket& ticket, double price)
 
     tickets.push_back(ticket);
     balance -= price;
+}
+void User::returnTickets(int movieId, double price)
+{
+    for (size_t i = 0; i < tickets.getSize(); ) {
+        if (tickets[i].getMovieId() == movieId) {
+            tickets.erase(i);
+            addBalance(price);
+        }
+        else ++i;
+    }
 }
 void User::removeTickets(int movieId)
 {
@@ -39,9 +63,11 @@ void User::removeTickets(int movieId)
         else ++i;
     }
 }
-
 void User::addToCatalogue(int movieId)
 {
+    removeTickets(movieId);
+
+    if (isInCatalogue(movieId)) return;
     catalogue.push_back(movieId);
 }
 void User::removeFromCatalogue(int movieId)

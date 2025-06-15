@@ -1,11 +1,6 @@
 #pragma once
 #include "Core/header/Movie.h"
-
-enum class Theme {
-	Nature,
-	History,
-	HistoricalFigure
-};
+#include "Helpers/header/Utilities.h"
 
 class DocumentaryMovie : public Movie
 {

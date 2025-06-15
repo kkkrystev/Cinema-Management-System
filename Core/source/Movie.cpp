@@ -2,7 +2,7 @@
 
 int Movie::s_nextId = 1;
 
-Movie::Movie(const MyString& title, int releaseYear, int duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours)
+Movie::Movie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours)
 	: title(title), releaseYear(releaseYear), duration(duration), 
 	hallId(hallId), screeningDate(screeningDate), screeningHours(screeningHours), 
 	id(s_nextId++), averageRating(0.0), ratingsCount(0) {}

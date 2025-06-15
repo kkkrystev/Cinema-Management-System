@@ -17,11 +17,13 @@ public:
 	const MyString& getName() const;
 	const MyString& getPassword() const;
 
+	bool hasTicket(int movieId) const;
+	bool isInCatalogue(int movieId) const;
+
 	void addBalance(double sum);
-
 	void buyTicket(const Ticket& ticket, double price);
+	void returnTickets(int movieId, double price);
 	void removeTickets(int movieId);
-
 	void addToCatalogue(int movieId);
 	void removeFromCatalogue(int movieId);
 

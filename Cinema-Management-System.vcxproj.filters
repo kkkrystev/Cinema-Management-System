@@ -68,9 +68,6 @@
     <ClInclude Include="Helpers\header\Utilities.h">
       <Filter>Header Files\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="User\header\Catalogue.h">
-      <Filter>Header Files\User</Filter>
-    </ClInclude>
     <ClInclude Include="User\header\User.h">
       <Filter>Header Files\User</Filter>
     </ClInclude>
@@ -123,9 +120,6 @@
     </ClCompile>
     <ClCompile Include="Helpers\source\Utilities.cpp">
       <Filter>Source Files\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="User\source\Catalogue.cpp">
-      <Filter>Source Files\User</Filter>
     </ClCompile>
     <ClCompile Include="User\source\User.cpp">
       <Filter>Source Files\User</Filter>

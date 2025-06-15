@@ -3,11 +3,11 @@ class Date
 {
 public:
     Date();
-    Date(int day, int month, int year);
+    Date(unsigned day, unsigned month, unsigned year);
 
-    int getDay() const;
-    int getMonth() const;
-    int getYear() const;
+    unsigned getDay() const;
+    unsigned getMonth() const;
+    unsigned getYear() const;
 
     bool isPast() const;
 
@@ -19,10 +19,10 @@ public:
     friend bool operator>=(const Date& lhs, const Date& rhs);
 
 private:
-	int day, month, year;
-
-    static bool isPast(int day, int month, int year);
-    static bool isValid(int day, int month, int year);
-    static bool isLeapYear(int year);
+    unsigned day, month, year;
+    
+    static bool isPast(unsigned day, unsigned month, unsigned year);
+    static bool isValid(unsigned day, unsigned month, unsigned year);
+    static bool isLeapYear(unsigned year);
 };
 

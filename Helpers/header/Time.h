@@ -3,10 +3,12 @@ class Time
 {
 public:
 	Time();
-	Time(int hour, int minutes);
+	Time(unsigned hour, unsigned minutes);
 
-	int getHour() const;
-	int getMinutes() const;
+	unsigned getHour() const;
+	unsigned getMinutes() const;
+
+	unsigned toMinutes() const;
 
 	friend bool operator<(const Time& lhs, const Time& rhs);
 	friend bool operator>(const Time& lhs, const Time& rhs);
@@ -16,6 +18,8 @@ public:
 	friend bool operator>=(const Time& lhs, const Time& rhs);
 
 private:
-	int hour, minutes;
+	unsigned hour, minutes;
+
+	static bool isValid(unsigned hour, unsigned minutes);
 };
 

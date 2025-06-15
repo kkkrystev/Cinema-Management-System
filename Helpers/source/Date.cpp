@@ -12,27 +12,25 @@ Date::Date()
     month = local.tm_mon + 1;
     year = local.tm_year + 1900;
 }
-Date::Date(int day, int month, int year)
+Date::Date(unsigned day, unsigned month, unsigned year)
 {
     if (!isValid(day, month, year))
         throw std::invalid_argument("Invalid date provided");
-    if (!isPast(day, month, year))
-        throw std::invalid_argument("Date must not be in the past");
 
     this->day = day;
     this->month = month;
     this->year = year;
 }
 
-int Date::getDay() const
+unsigned Date::getDay() const
 {
     return day;
 }
-int Date::getMonth() const
+unsigned Date::getMonth() const
 {
     return month;
 }
-int Date::getYear() const
+unsigned Date::getYear() const
 {
     return month;
 }
@@ -42,7 +40,7 @@ bool Date::isPast() const
     isPast(day, month, year);
 }
 
-bool Date::isPast(int day, int month, int year)
+bool Date::isPast(unsigned day, unsigned month, unsigned year)
 {
     time_t now = time(0);
     tm local;
@@ -52,21 +50,18 @@ bool Date::isPast(int day, int month, int year)
     int currentMonth = local.tm_mon + 1;
     int currentDay = local.tm_mday;
 
-    if (year < currentYear)
-        return true;
-    if (year == currentYear && month < currentMonth)
-        return true;
-    if (year == currentYear && month == currentMonth && day < currentDay)
-        return true;
+    if (year < currentYear) return true;
+    else if (year == currentYear && month < currentMonth) return true;
+    else if (year == currentYear && month == currentMonth && day < currentDay) return true;
 
     return false;
 }
-bool Date::isValid(int day, int month, int year)
+bool Date::isValid(unsigned day, unsigned month, unsigned year)
 {
     if (year < 0 || month < 1 || month > 12 || day < 1)
         return false;
 
-    int daysInMonth[] = { 31, 28, 31, 30, 31, 30,
+    unsigned daysInMonth[] = { 31, 28, 31, 30, 31, 30,
                           31, 31, 30, 31, 30, 31 };
 
     if (isLeapYear(year))
@@ -75,7 +70,7 @@ bool Date::isValid(int day, int month, int year)
     return day <= daysInMonth[month - 1];
 
 }
-bool Date::isLeapYear(int year)
+bool Date::isLeapYear(unsigned year)
 {
 	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
@@ -83,12 +78,10 @@ bool Date::isLeapYear(int year)
 bool operator<(const Date& lhs, const Date& rhs)
 {
     if (lhs.year < rhs.year) return true;
-    if (lhs.year > rhs.year) return false;
+    else if (lhs.year == rhs.year && lhs.month < rhs.month) return true;
+    else if (lhs.year == rhs.year && lhs.month == rhs.month && lhs.day < rhs.day) return true;
 
-    if (lhs.month < rhs.month) return true;
-    if (lhs.month > rhs.month) return false;
-
-    return lhs.day < rhs.day;
+    return false;
 }
 
 bool operator>(const Date& lhs, const Date& rhs)

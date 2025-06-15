@@ -12,7 +12,7 @@ enum class Genre {
 class Movie
 {
 public:
-	Movie(const MyString& title, int releaseYear, int duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours);
+	Movie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours);
 	virtual ~Movie() = default;
 
 	int getId() const;
@@ -31,8 +31,8 @@ protected:
 	int id;
 
 	MyString title;
-	int releaseYear;
-	int duration; // in minutes
+	unsigned releaseYear;
+	unsigned duration; // in minutes
 	int hallId;
 	Date screeningDate;
 	TimeInterval screeningHours;

@@ -1,5 +1,6 @@
 #include "Helpers/header/Time.h"
 #include <ctime>
+#include <stdexcept>
 
 Time::Time() 
 {
@@ -10,15 +11,34 @@ Time::Time()
 	hour = local.tm_hour;
 	minutes = local.tm_min;
 }
-Time::Time(int hour, int minutes) : hour(hour), minutes(minutes) {}
+Time::Time(unsigned hour, unsigned minutes) 
+{
+	if (!isValid(hour, minutes))
+		throw std::invalid_argument("Invalid time provided");
 
-int Time::getHour() const
+	this->hour = hour;
+	this->minutes = minutes;
+}
+
+unsigned Time::getHour() const
 {
 	return hour;
 }
-int Time::getMinutes() const
+unsigned Time::getMinutes() const
 {
 	return minutes;
+}
+
+unsigned Time::toMinutes() const
+{
+	return hour * 60 + minutes;
+}
+
+bool Time::isValid(unsigned hour, unsigned minutes)
+{
+	if (hour > 23) return false;
+	if (minutes > 59) return false;
+	return true;
 }
 
 bool operator<(const Time& lhs, const Time& rhs)

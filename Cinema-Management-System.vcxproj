@@ -34,7 +34,6 @@
     <ClInclude Include="Helpers\header\Utilities.h" />
     <ClInclude Include="System\header\System.h" />
     <ClInclude Include="User\header\Admin.h" />
-    <ClInclude Include="User\header\Catalogue.h" />
     <ClInclude Include="User\header\RegularUser.h" />
     <ClInclude Include="User\header\User.h" />
   </ItemGroup>
@@ -53,7 +52,6 @@
     <ClCompile Include="Helpers\source\Utilities.cpp" />
     <ClCompile Include="System\source\System.cpp" />
     <ClCompile Include="User\source\Admin.cpp" />
-    <ClCompile Include="User\source\Catalogue.cpp" />
     <ClCompile Include="User\source\RegularUser.cpp" />
     <ClCompile Include="User\source\User.cpp" />
   </ItemGroup>

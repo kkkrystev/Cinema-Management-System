@@ -119,7 +119,3 @@ void Hall::freeSeat(size_t row, size_t col)
 
 	seats[row][col] = false;
 }
-
-void Hall::printLayout() const
-{
-}

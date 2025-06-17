@@ -10,6 +10,16 @@ size_t getFileSize(std::ifstream& file)
 	return fileSize;
 }
 
+MyString genreToString(Genre genre)
+{
+	switch (genre) {
+	case Genre::Action		: return MyString("Action");
+	case Genre::Drama		: return MyString("Drama");
+	case Genre::Documentary : return MyString("Documentary");
+	default					: return MyString("Unknown");
+	}
+}
+
 MyString roleToString(Role role)
 {
 	switch (role) {

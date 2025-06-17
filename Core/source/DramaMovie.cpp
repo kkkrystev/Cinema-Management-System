@@ -6,6 +6,25 @@ DramaMovie::DramaMovie(const MyString& title, int releaseYear, int duration,
 	int hallId, const Date& screeningDate, const TimeInterval& screeningHours, bool hasComedyElements)
 	: Movie(title, releaseYear, duration, hallId, screeningDate, screeningHours), hasComedyElements(hasComedyElements) {}
 
+void DramaMovie::printAsUpcoming() const
+{
+	Movie::printAsUpcoming();
+
+	if (hasComedyElements)
+		std::cout << " | Has comedy elements";
+	else
+		std::cout << " | Does not have comedy elements";
+}
+void DramaMovie::printAsPast() const
+{
+	Movie::printAsPast();
+
+	if (hasComedyElements)
+		std::cout << " | Has comedy elements";
+	else
+		std::cout << " | Does not have comedy elements";
+}
+
 Movie* DramaMovie::clone() const
 {
 	return new DramaMovie(*this);

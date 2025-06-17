@@ -4,6 +4,7 @@
 class SystemLauncher
 {
 public:
+	static void printLegend();
 	static void run();
 };
 

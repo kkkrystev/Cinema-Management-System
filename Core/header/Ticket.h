@@ -5,18 +5,18 @@ class Ticket
 {
 public:
 	Ticket();
-	Ticket(int movieId, int row, int col);
+	Ticket(int movieId, size_t row, size_t col);
 
 	int getMovieId() const;
-	int getRow() const;
-	int getCol() const;
+	size_t getRow() const;
+	size_t getCol() const;
 
 	void saveToBinaryFile(std::ofstream& ofs) const;
 	void loadFromBinaryFile(std::ifstream& ifs);
 
 private:
 	int movieId;
-	int row;
-	int col;
+	size_t row;
+	size_t col;
 };
 

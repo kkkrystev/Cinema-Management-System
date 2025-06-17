@@ -6,6 +6,28 @@ DocumentaryMovie::DocumentaryMovie(const MyString& title, int releaseYear, int d
 	const Date& screeningDate, const TimeInterval& screeningHours, Theme theme, bool isBasedOnTrueEvents)
 	: Movie(title, releaseYear, duration, hallId, screeningDate, screeningHours), theme(theme), isBasedOnTrueEvents(isBasedOnTrueEvents) {}
 
+void DocumentaryMovie::printAsUpcoming() const
+{
+	Movie::printAsUpcoming();
+	std::cout << " | Theme: " << themeToString(theme);
+
+	if (isBasedOnTrueEvents)
+		std::cout << ", Based on true events";
+	else
+		std::cout << ", Not based on true events";
+}
+
+void DocumentaryMovie::printAsPast() const
+{
+	Movie::printAsPast();
+	std::cout << " | Theme: " << themeToString(theme);
+
+	if (isBasedOnTrueEvents)
+		std::cout << ", Based on true events";
+	else
+		std::cout << ", Not based on true events";
+}
+
 Movie* DocumentaryMovie::clone() const
 {
 	return new DocumentaryMovie(*this);

@@ -8,10 +8,10 @@ public:
 	Hall(size_t rows, size_t cols);
 
 	Hall(const Hall& other);
-	Hall(Hall&& other);
+	Hall(Hall&& other) noexcept;
 
 	Hall& operator=(const Hall& other);
-	Hall& operator=(Hall&& other);
+	Hall& operator=(Hall&& other) noexcept;
 
 	~Hall();
 

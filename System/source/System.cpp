@@ -11,6 +11,7 @@ System::System()
 	loadUsers();
 	loadMovies();
 	loadHalls();
+	std::cout << '\n';
 }
 System::~System()
 {
@@ -37,19 +38,18 @@ void System::login(const MyString& name, const MyString& password)
 	if (loggedIn)
 		throw std::logic_error("User already logged in.");
 
-	PolymorphicPtr<User> user = findUserByName(name);
+	User* user = findUserByName(name);
 
 	if (!user)
 		throw std::invalid_argument("Invalid login name.");
+
 	if (user->getPassword() != password)
 		throw std::invalid_argument("Invalid login password.");
 
 	cleanupExpiredMovies();
 
 	loggedIn = user;
-	std::cout << "Login successful!" << '\n';
-	if (loggedIn->getRole() != Role::Admin)
-		std::cout << "Welcome, " << name << "!\n";
+	std::cout << "Login successful! Welcome, " << name << "!\n";
 }
 void System::logout()
 {
@@ -57,7 +57,8 @@ void System::logout()
 }
 void System::addBalance(double sum)
 {
-	loginAndRoleValidation();
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
 	if (sum <= 0.0)
 		throw std::invalid_argument("Invalid sum.");
@@ -65,11 +66,31 @@ void System::addBalance(double sum)
 	loggedIn->addBalance(sum);
 	std::cout << "You have successfully added " << sum << " to your balance.\n";
 }
-void System::buyTicket(int movieId, int row, int col)
+void System::printBalance() const
 {
-	loginAndRoleValidation();
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
-	PolymorphicPtr<Movie> movie = findMovieById(movieId);
+	std::cout << "Balnce: " << loggedIn->getBalance() << " BGN.\n";
+}
+void System::printHall(int hallId)
+{
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	Hall* hall = findHallById(hallId);
+
+	if (!hall)
+		throw std::invalid_argument("A hall with such ID does NOT exist.");
+
+	hall->printLayout();
+}
+void System::buyTicket(int movieId, size_t row, size_t col)
+{
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	Movie* movie = findMovieById(movieId);
 	if (!movie)
 		throw std::invalid_argument("A movie with such ID does NOT exist.");
 
@@ -78,34 +99,41 @@ void System::buyTicket(int movieId, int row, int col)
 	if (!hall)
 		throw std::invalid_argument("A hall with such ID does NOT exist.");
 
-	// potentially make this a while cycle
-	if (hall->isSeatTaken(row, col))
+	if (row == 0 || col == 0)
+		throw std::invalid_argument("Invalid seat coordinates.");
+
+	if (hall->isSeatTaken(row-1, col-1))
 		throw std::invalid_argument("Unfortunately, this seat is already taken.");
 
-	hall->reserveSeat(row, col);
+	hall->reserveSeat(row-1, col-1);
 
-	Ticket ticket(movieId, row, col);
+	Ticket ticket(movieId, row-1, col-1);
 
 	loggedIn->buyTicket(ticket, movie->getTicketPrice());
 	std::cout << "Thank you for purchasing a ticket for " << movie->getTitle() << ".\n";
 }
 void System::rateMovie(int movieId, unsigned rating)
 {
-	loginAndRoleValidation();
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
 	if (rating < Constants::MIN_MOVIE_RATING || rating > Constants::MAX_MOVIE_RATING)
 		throw std::invalid_argument("Rating is restricted to a scale from 0 to 5");
 
-	PolymorphicPtr<Movie> movie = findMovieById(movieId);
+	Movie* movie = findMovieById(movieId);
 	if (!movie)
 		throw std::invalid_argument("A movie with such ID does not exist");
+
+	if (!isMovieInCatalogue(movieId))
+		throw std::logic_error("You can only rate movies you have been to.");
 
 	movie->addToRating(rating);
 	std::cout << "Rating submitted. Movie score updated.\n";
 }
 void System::listMovies() const
 {
-	loginAndRoleValidation();
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
 	if (movies.getSize() == 0) {
 		std::cout << "There are no upcoming screenings scheduled for the moment.\n";
@@ -118,20 +146,70 @@ void System::listMovies() const
 		Time start = movies[i]->getScreeningHours().start;
 		Time end = movies[i]->getScreeningHours().end;
 		if (!isScreeningInPast(date, start, end)) {
-			movies[i]->printInfo();
+			movies[i]->printAsUpcoming();
 			std::cout << '\n';
 		}
 	}
 }
-void System::listTickets() const
+void System::listHistory()
 {
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
+	size_t movieCount = loggedIn->getCatalogue().getSize();
+
+	if (movieCount == 0) {
+		std::cout << "No movies in your catalogue to display.\n";
+		return;
+	}
+
+	for (size_t i = 0; i < movieCount; i++) {
+		std::cout << "Movie #" << i + 1 << ": ";
+
+		int movieId = loggedIn->getCatalogue()[i];
+		Movie* movie = findMovieById(movieId);
+
+		movie->printAsPast();
+		std::cout << "\n";
+	}
+
+}
+void System::listTickets()
+{
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	size_t ticketCount = loggedIn->getTickets().getSize();
+
+	if (ticketCount == 0) {
+		std::cout << "No tickets to display.\n";
+		return;
+	}
+
+	for (size_t i = 0; i < ticketCount; i++) {
+		std::cout << "Ticket #" << i + 1 << ": ";
+
+		int movieId = loggedIn->getTickets()[i].getMovieId();
+		Movie* movie = findMovieById(movieId);
+
+		std::cout << movie->getTitle() 
+			<< " | " << movie->getScreeningDate() 
+			<< ", " << movie->getScreeningHours()
+			<< " | Hall: " << movie->getHallId() 
+			<< " | Seat: " << loggedIn->getTickets()[i].getRow()+1 << loggedIn->getTickets()[i].getCol()+1 
+			<< " | " << movie->getTicketPrice() << " BGN"
+			<< "\n";
+	}
 }
 
 // Admin-specific
 void System::addActionMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, unsigned actionIntensity)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
 
 	validateMovieInputData(title, releaseYear, duration, hallId, screeningDate, start, end);
 
@@ -147,7 +225,11 @@ void System::addActionMovie(const MyString& title, unsigned releaseYear, unsigne
 }
 void System::addDocumentaryMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, Theme theme, bool isBasedOnTrueEvents)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
 
 	validateMovieInputData(title, releaseYear, duration, hallId, screeningDate, start, end);
 
@@ -160,7 +242,11 @@ void System::addDocumentaryMovie(const MyString& title, unsigned releaseYear, un
 }
 void System::addDramaMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, bool hasComedyElements)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
 
 	validateMovieInputData(title, releaseYear, duration, hallId, screeningDate, start, end);
 
@@ -173,9 +259,13 @@ void System::addDramaMovie(const MyString& title, unsigned releaseYear, unsigned
 }
 void System::removeMovie(int movieId)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
-	PolymorphicPtr<Movie> movie = findMovieById(movieId);
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
+
+	Movie* movie = findMovieById(movieId);
 	if (!movie)
 		throw std::invalid_argument("A movie with such ID does NOT exist");
 
@@ -195,17 +285,24 @@ void System::removeMovie(int movieId)
 		std::cout << "Removing user tickets and restoring the amount paid by users...\n";
 	}
 
-	removeMovieFromList(movieId);
 	std::cout << "Movie " << movie->getTitle() << " removed successfully.\n";
+	removeMovieFromList(movieId);	
 }
 void System::removeUser(int userId)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
 
 	for (size_t i = 0; i < users.getSize(); i++)
 	{
 		if (users[i] && users[i]->getId() == userId)
 		{
+			if (users[i]->getRole() == Role::Admin)
+				throw std::logic_error("You are not allowed to remove the Admin.");
+
 			std::cout << "User " << users[i]->getName() << " with ID " << userId << " deleted successfully\n";
 			users.erase(i);
 			return;
@@ -214,17 +311,25 @@ void System::removeUser(int userId)
 
 	throw std::invalid_argument("A user with such ID does NOT exist.\n");
 }
-void System::openHall(int rows, int cols)
+void System::openHall(size_t rows, size_t cols)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
 
 	Hall hall(rows, cols);
-	halls.push_back(hall);
 	std::cout << "A new hall with ID " << hall.getId() << " successfully opened.\n";
+	halls.push_back(std::move(hall));
 }
 void System::closeHall(int hallId)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
 
 	Hall* hall = findHallById(hallId);
 
@@ -252,7 +357,7 @@ void System::closeHall(int hallId)
 				movies[i]->setHallId(-1);
 			}
 			else {
-				returnUsersTickets(movies[i]);
+				returnUsersTickets(movies[i].get());
 			}
 		}
 	}
@@ -267,9 +372,13 @@ void System::closeHall(int hallId)
 }
 void System::updateMovieTitle(int movieId, const MyString& newTitle)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
-	PolymorphicPtr<Movie> movie = findMovieById(movieId);
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
+
+	Movie* movie = findMovieById(movieId);
 	if (!movie)
 		throw std::invalid_argument("A movie with such ID does not exist.");
 
@@ -286,9 +395,13 @@ void System::updateMovieTitle(int movieId, const MyString& newTitle)
 }
 void System::updateMovieHall(int movieId, int newHallId)
 {
-	loginAndRoleValidation(Role::Admin);
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
-	PolymorphicPtr<Movie> movie = findMovieById(movieId);
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
+
+	Movie* movie = findMovieById(movieId);
 	if (!movie)
 		throw std::invalid_argument("A movie with such ID does not exist.");
 
@@ -309,17 +422,93 @@ void System::updateMovieHall(int movieId, int newHallId)
 	std::cout << "Successfully moved " << movie->getTitle() << " to hall " << newHallId << ".\n";
 	movie->setHallId(newHallId);
 }
-void System::listUserHistory(int userId) const
+void System::listUserHistory(int userId) 
 {
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
+
+	User* user = findUserById(userId);
+	if (!user)
+		throw std::invalid_argument("A user with such ID does NOT exist.");
+
+	size_t watchCount = user->getCatalogue().getSize();
+
+	if (watchCount == 0) {
+		std::cout << user->getName() << "'s watch history is empty.\n";
+		return;
+	}
+
+	std::cout << user->getName() << "'s watch history:\n";
+	for (size_t i = 0; i < watchCount; i++) {
+		int movieId = user->getCatalogue()[i];
+		Movie* movie = findMovieById(movieId);
+
+		std::cout << "[] "
+			<< movie->getId()
+			<< " | " << movie->getTitle()
+			<< " | " << movie->getScreeningDate()
+			<< ", " << movie->getScreeningHours()
+			<< "\n";
+			
+	}
 }
-void System::listUserTickets(int userId) const
+void System::listUserTickets(int userId) 
 {
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
+
+	User* user = findUserById(userId);
+	if (!user)
+		throw std::invalid_argument("A user with such ID does NOT exist.");
+
+	size_t ticketCount = user->getTickets().getSize();
+
+	if (ticketCount == 0) {
+		std::cout << user->getName() << " has no tickets to display.\n";
+		return;
+	}
+
+	std::cout << user->getName() << "'list of tickets:\n";
+	for (size_t i = 0; i < ticketCount; i++) {
+		int movieId = user->getTickets()[i].getMovieId();
+		Movie* movie = findMovieById(movieId);
+
+		std::cout << "[] "
+			<< movie->getId()
+			<< " | " << movie->getTitle()
+			<< " | " << movie->getScreeningDate()
+			<< ", " << movie->getScreeningHours()
+			<< " | Hall: " << movie->getHallId()
+			<< " | Seat: " << loggedIn->getTickets()[i].getRow()+1 << '-' << loggedIn->getTickets()[i].getCol() + 1
+			<< " | " << movie->getTicketPrice() << " BGN"
+			<< "\n";
+	}
 }
 void System::listUsers() const
 {
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
 
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
+
+	if (users.getSize() <= 1) {
+		std::cout << "No users to display.\n";
+		return;
+	}
+
+	for (size_t i = 0; i < users.getSize(); i++) {
+		std::cout << "[] User " << users[i]->getId()
+			<< " | " << users[i]->getName()
+			<< " | Balance: " << users[i]->getBalance()
+			<< '\n';
+	}
 }
 
 // Save & load
@@ -335,7 +524,6 @@ void System::saveUsers() const
 	ofs.write((const char*)&count, sizeof(count));
 
 	for (size_t i = 0; i < count; i++) {
-		std::cout << count;
 		Role r = users[i]->getRole();
 		ofs.write((const char*)&r, sizeof(r));
 		users[i]->saveToBinaryFile(ofs);
@@ -391,7 +579,6 @@ void System::loadUsers()
 			return;
 		}
 
-		users.clear();
 		users.push_back(PolymorphicPtr<User>(new Admin()));
 		std::cout << "A new users.dat and an Admin user have been created successfully!\n";
 		return;
@@ -400,28 +587,37 @@ void System::loadUsers()
 	if (getFileSize(ifs) == 0) {
 		users.clear();
 		users.push_back(PolymorphicPtr<User>(new Admin()));
+		std::cout << "A new Admin user has been created successfully!\n";
 		return;
 	}
 
+	users.clear();
 	size_t count;
 	ifs.read((char*)&count, sizeof(count));
-	users.clear();
 
 	for (size_t i = 0; i < count; i++) {
 		Role role;
 		ifs.read((char*)&role, sizeof(role));
 
-		PolymorphicPtr<User> user;
-		switch (role) {
-		case Role::Admin	: user = PolymorphicPtr<User>(new Admin());       break;
-		case Role::Regular  : user = PolymorphicPtr<User>(new RegularUser()); break;
-		}
+		User* user;
 
-		user->loadFromBinaryFile(ifs);
-		users.push_back(std::move(user));
+		switch (role) {
+		case Role::Admin: { 
+			user = new Admin();
+			user->loadFromBinaryFile(ifs);
+			users.push_back(PolymorphicPtr<User>(user));
+			break; 
+		}
+		case Role::Regular: { 
+			user = new RegularUser();
+			user->loadFromBinaryFile(ifs);
+			users.push_back(PolymorphicPtr<User>(user));
+			break; 
+		}
+		}
 	}
 
-	User::setNextId(users[users.getSize() - 1]->getId() + 1);
+	User::setNextId(users.back()->getId() + 1);
 
 	std::cout << "Users loaded successfully!\n";
 }
@@ -442,7 +638,10 @@ void System::loadMovies()
 		return;
 	}
 
-	if (getFileSize(ifs) == 0) return;
+	if (getFileSize(ifs) == 0) {
+		std::cout << "No movies to load. Continuing...\n";
+		return;
+	}
 
 	size_t movieCount = 0;
 	ifs.read((char*)&movieCount, sizeof(movieCount));
@@ -451,19 +650,31 @@ void System::loadMovies()
 		Genre genre;
 		ifs.read((char*)&genre, sizeof(genre));
 
-		PolymorphicPtr<Movie> movie;
+		Movie* movie;
 
 		switch (genre) {
-		case Genre::Action:      movie = PolymorphicPtr<Movie>(new ActionMovie());     break;
-		case Genre::Drama:       movie = PolymorphicPtr<Movie>(new DramaMovie());      break;
-		case Genre::Documentary: movie = PolymorphicPtr<Movie>(new DocumentaryMovie());break;
+		case Genre::Action: {
+			movie = new ActionMovie();
+			movie->loadFromBinaryFile(ifs);
+			movies.push_back(PolymorphicPtr<Movie>(movie));
+			break;
 		}
-
-		movie->loadFromBinaryFile(ifs);
-		movies.push_back(std::move(movie));
+		case Genre::Drama: { 
+			movie = new DramaMovie();
+			movie->loadFromBinaryFile(ifs);
+			movies.push_back(PolymorphicPtr<Movie>(movie));
+			break; }
+		case Genre::Documentary: {
+			movie = new DocumentaryMovie();
+			movie->loadFromBinaryFile(ifs);
+			movies.push_back(PolymorphicPtr<Movie>(movie));
+			break;
+		}
+		}
 	}
 
-	Movie::setNextId(movies.back()->getId() + 1);
+	if (!movies.empty())
+		Movie::setNextId(movies.back()->getId() + 1);
 
 	ifs.close();
 	std::cout << "Movies loaded successfully!\n";
@@ -485,7 +696,10 @@ void System::loadHalls()
 		return;
 	}
 
-	if (getFileSize(ifs) == 0) return;
+	if (getFileSize(ifs) == 0) {
+		std::cout << "No halls to load. Continuing...\n";
+		return;
+	}
 
 	size_t count;
 	ifs.read((char*)&count, sizeof(count));
@@ -493,25 +707,26 @@ void System::loadHalls()
 	for (size_t i = 0; i < count; i++) {
 		Hall hall;
 		hall.loadFromBinaryFile(ifs);
-		halls.push_back(std::move(hall));
+		halls.push_back(hall);
 	}
 
-	Hall::setNextId(halls.back().getId() + 1);
+	if(!halls.empty())
+		Hall::setNextId(halls.back().getId() + 1);
 
 	ifs.close();
 	std::cout << "Halls loaded successfully!\n";
 }
 
 // Finders
-PolymorphicPtr<User> System::findUserById(int id)
+User* System::findUserById(int id)
 {
 	for (size_t i = 0; i < users.getSize(); i++) {
 		if (users[i]->getId() == id)
-			return users[i];
+			return users[i].get();
 	}
 	return nullptr;
 }
-PolymorphicPtr<User> System::findUserByName(const MyString& name)
+User* System::findUserByName(const MyString& name)
 {
 	for (size_t i = 0; i < users.getSize(); i++) {
 		if (users[i]->getName() == name)
@@ -519,11 +734,11 @@ PolymorphicPtr<User> System::findUserByName(const MyString& name)
 	}
 	return nullptr;
 }
-PolymorphicPtr<Movie> System::findMovieById(int id)
+Movie* System::findMovieById(int id)
 {
 	for (size_t i = 0; i < movies.getSize(); i++) {
 		if (movies[i]->getId() == id)
-			return movies[i];
+			return movies[i].get();
 	}
 	return nullptr;
 }
@@ -544,14 +759,6 @@ bool System::isNameTaken(const MyString& name) const
 	}
 
 	return false;
-}
-void System::loginAndRoleValidation(Role expected) const
-{
-	if (!loggedIn)
-		throw std::logic_error("You must be logged in to perform this action.");
-
-	if (loggedIn->getRole() != expected)
-		throw std::logic_error(("You must be a(n) " + roleToString(expected) + " to perform this action.").c_str());
 }
 bool System::isDurationValid(unsigned duration, const Time& start, const Time& end) const
 {
@@ -582,6 +789,14 @@ bool System::doScreeningsOverlap(int hallId, const Date& screeningDate, const Ti
 			doIntervalsOverlap(movies[i]->getScreeningHours(), TimeInterval(start, end))) {
 			return true;
 		}
+	}
+	return false;
+}
+bool System::isMovieInCatalogue(int movieId) const
+{
+	for (size_t i = 0; i < loggedIn->getCatalogue().getSize(); i++) {
+		if (loggedIn->getCatalogue()[i] == movieId)
+			return true;
 	}
 	return false;
 }
@@ -636,7 +851,7 @@ void System::removeMovieFromList(int movieId)
 		}
 	}
 }
-void System::returnUsersTickets(const PolymorphicPtr<Movie>& movie)
+void System::returnUsersTickets(Movie* movie)
 {
 	int movieId = movie->getId();
 	double ticketPrice = movie->getTicketPrice();

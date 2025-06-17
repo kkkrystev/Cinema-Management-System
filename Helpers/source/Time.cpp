@@ -62,7 +62,6 @@ std::ostream& operator<<(std::ostream& os, const Time& time)
 
 	return os;
 }
-
 std::istream& operator>>(std::istream& is, Time& time)
 {
 	int h, m;
@@ -73,7 +72,6 @@ std::istream& operator>>(std::istream& is, Time& time)
 		time = Time(-1, -1);
 	return is;
 }
-
 
 bool operator<(const Time& lhs, const Time& rhs)
 {

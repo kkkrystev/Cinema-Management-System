@@ -1,7 +1,7 @@
 #include "User/header/User.h"
 #include <fstream>
 
-int User::s_nextId = 100;
+int User::s_nextId = 10;
 
 User::User() : id(-1), balance(0.0) {}
 
@@ -19,6 +19,21 @@ const MyString& User::getName() const
 const MyString& User::getPassword() const
 {
     return password;
+}
+
+const MyVector<Ticket>& User::getTickets() const
+{
+    return tickets;
+}
+
+const MyVector<int>& User::getCatalogue() const
+{
+    return catalogue;
+}
+
+double User::getBalance() const
+{
+    return balance;
 }
 
 void User::setNextId(int nextId)

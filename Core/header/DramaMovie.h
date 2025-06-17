@@ -8,6 +8,9 @@ public:
 	DramaMovie(const MyString& title, int releaseYear, int duration, int hallId, 
 		const Date& screeningDate, const TimeInterval& screeningHours, bool hasComedyElements);
 
+	void printAsUpcoming() const override;
+	void printAsPast() const override;
+
 	Movie* clone() const override;
 	Genre getGenre() const override;
 	double getTicketPrice() const override;

@@ -1,2 +1,6 @@
-﻿  System.cpp
+﻿  AddBalanceCommand.cpp
+  RemoveUserCommand.cpp
+  System.cpp
+  SystemLauncher.cpp
+  Generating Code...
   Cinema-Management-System.vcxproj -> C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\x64\Debug\Cinema-Management-System.exe

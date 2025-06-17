@@ -1,19 +1,20 @@
 #include "Core/header/Movie.h"
 #include <fstream>
 
-int Movie::s_nextId = 1;
+int Movie::s_nextId = 10;
 
 Movie::Movie() : title(""), releaseYear(0), duration(0), hallId(-1), screeningDate(1, 1, 0), screeningHours(), 
 	id(-1), averageRating(0.0), ratingsCount(0) {}
-
 Movie::Movie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours)
 	: title(title), releaseYear(releaseYear), duration(duration), 
 	hallId(hallId), screeningDate(screeningDate), screeningHours(screeningHours), 
 	id(s_nextId++), averageRating(0.0), ratingsCount(0) {}
 
-void Movie::printInfo() const
+void Movie::printAsUpcoming() const
 {
-	std::cout << "Title: " << title
+	std::cout << "ID: " << id
+		<< " | Title: " << title
+		<< " | Genre: " << genreToString(getGenre())
 		<< " | Year: " << releaseYear
 		<< " | Duration: " << duration << "min"
 		<< " | Hall: ";
@@ -25,8 +26,16 @@ void Movie::printInfo() const
 
 	std::cout << " | Date: " << screeningDate
 		<< " | Time: " << screeningHours
-		<< " | Avg Rating: " << averageRating
-		<< " | Ratings: " << ratingsCount;
+		<< " | Ticket price: " << getTicketPrice();
+}
+void Movie::printAsPast() const
+{
+	std::cout << "ID: " << id
+		<< " | Title: " << title
+		<< " | Genre: " << genreToString(getGenre())
+		<< " | Year: " << releaseYear
+		<< " | Date: " << screeningDate
+		<< " | Avg Rating: " << averageRating;
 }
 
 void Movie::saveToBinaryFile(std::ofstream& ofs) const
@@ -79,7 +88,6 @@ void Movie::setHallId(int hallId)
 {
 	this->hallId = hallId;
 }
-
 void Movie::setTitle(const MyString& title)
 {
 	this->title = title;

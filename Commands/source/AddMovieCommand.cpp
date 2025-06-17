@@ -2,6 +2,8 @@
 
 void AddMovieCommand::execute(System* system) const
 {
+	try {
+
 	MyString genreStr;
 	
 	std::cin >> genreStr;
@@ -16,7 +18,6 @@ void AddMovieCommand::execute(System* system) const
 	
 	std::cin >> title >> releaseYear >> duration >> hallId >> screeningDate >> start >> end;
 
-	try {
 		if (genre == Genre::Action) {
 			unsigned actionIntensity;
 

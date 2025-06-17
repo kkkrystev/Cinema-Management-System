@@ -22,10 +22,13 @@ public:
 	void login(const MyString& name, const MyString& password);
 	void logout();
 	void addBalance(double sum);
-	void buyTicket(int movieId, int row, int col);
+	void printBalance() const;
+	void printHall(int hallId);
+	void buyTicket(int movieId, size_t row, size_t col);
 	void rateMovie(int movieId, unsigned rating);
 	void listMovies() const;
-	void listTickets() const;
+	void listHistory();
+	void listTickets();
 
 	// Admin-specific
 	void addActionMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, unsigned actionIntensity);
@@ -33,12 +36,12 @@ public:
 	void addDramaMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, bool hasComedyElements);
 	void removeMovie(int movieId);
 	void removeUser(int userId);
-	void openHall(int rows, int cols);
+	void openHall(size_t rows, size_t cols);
 	void closeHall(int hallId);
 	void updateMovieTitle(int movieId, const MyString& newTitle);
 	void updateMovieHall(int movieId, int newHallId);
-	void listUserHistory(int userId) const;
-	void listUserTickets(int userId) const;
+	void listUserHistory(int userId);
+	void listUserTickets(int userId);
 	void listUsers() const;
 
 private:
@@ -46,7 +49,7 @@ private:
 	MyVector<PolymorphicPtr<Movie>> movies;
 	MyVector<Hall> halls;
 
-	PolymorphicPtr<User> loggedIn;
+	User* loggedIn;
 
 	System();
 	System(const System&) = delete;
@@ -63,9 +66,9 @@ private:
 	void loadHalls();
 
 	// Finders
-	PolymorphicPtr<User> findUserById(int id);
-	PolymorphicPtr<User> findUserByName(const MyString& name);
-	PolymorphicPtr<Movie> findMovieById(int id);
+	User* findUserById(int id);
+	User* findUserByName(const MyString& name);
+	Movie* findMovieById(int id);
 	Hall* findHallById(int id);
 
 	// Checks
@@ -74,12 +77,12 @@ private:
 	bool isScreeningOngoing(const Date& screeningDate, const Time& start, const Time& end) const;
 	bool isScreeningInPast(const Date& screeningDate, const Time& start, const Time& end) const;
 	bool doScreeningsOverlap(int hallId, const Date& screeningDate, const Time& start, const Time& end) const;
+	bool isMovieInCatalogue(int movieId) const;
 
 	// Isolated and repetitive logic
 	void validateMovieInputData(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end);
-	void loginAndRoleValidation(Role expected = Role::Regular) const;
 	void cleanupExpiredMovies();
 	void removeMovieFromList(int movieId);
-	void returnUsersTickets(const PolymorphicPtr<Movie>& movie);
+	void returnUsersTickets(Movie* movie);
 	void addToUserCatalogues(int movieId);
 };

@@ -26,6 +26,7 @@ enum class Theme {
 	Unknown
 };
 
+MyString genreToString(Genre genre);
 MyString roleToString(Role role);
 MyString themeToString(Theme theme);
 Genre stringToGenre(const MyString& genreStr);

@@ -6,6 +6,18 @@ ActionMovie::ActionMovie(const MyString& title, int releaseYear, int duration, i
 	const Date& screeningDate, const TimeInterval& screeningHours, unsigned actionIntensity)
 	: Movie(title, releaseYear, duration, hallId, screeningDate, screeningHours), actionIntensity(actionIntensity) {}
 
+void ActionMovie::printAsUpcoming() const
+{
+	Movie::printAsUpcoming();
+	std::cout << " | ActionIntensity: " << actionIntensity;
+}
+
+void ActionMovie::printAsPast() const
+{
+	Movie::printAsPast();
+	std::cout << " | ActionIntensity: " << actionIntensity;
+}
+
 Movie* ActionMovie::clone() const
 {
 	return new ActionMovie(*this);

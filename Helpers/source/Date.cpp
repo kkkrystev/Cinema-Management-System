@@ -32,7 +32,7 @@ int Date::getMonth() const
 }
 int Date::getYear() const
 {
-    return month;
+    return year;
 }
 
 bool Date::isPast() const

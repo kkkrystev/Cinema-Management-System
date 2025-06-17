@@ -14,7 +14,8 @@ public:
 	virtual Movie* clone() const = 0;
 	virtual Genre getGenre() const = 0;
 	virtual double getTicketPrice() const = 0;
-	virtual void printInfo() const;
+	virtual void printAsUpcoming() const;
+	virtual void printAsPast() const;
 
 	virtual void saveToBinaryFile(std::ofstream& ofs) const;
 	virtual void loadFromBinaryFile(std::ifstream& ifs);

@@ -12,15 +12,14 @@
 #include "Commands/header/CloseHallCommand.h"
 #include "Commands/header/UpdateMovieTitleCommand.h"
 #include "Commands/header/UpdateMovieHallCommand.h"
-//#include "Commands/header/.h"
-//#include "Commands/header/.h"
-//#include "Commands/header/.h"
-//#include "Commands/header/.h"
-//#include "Commands/header/.h"
-//#include "Commands/header/.h"
-//#include "Commands/header/.h"
-//#include "Commands/header/.h"
-//#include "Commands/header/.h"
+#include "Commands/header/PrintBalanceCommand.h"
+#include "Commands/header/ListHistoryCommand.h"
+#include "Commands/header/ListTicketsCommand.h"
+#include "Commands/header/ListMoviesCommand.h"
+#include "Commands/header/ListUserHistoryCommand.h"
+#include "Commands/header/ListUserTicketsCommand.h"
+#include "Commands/header/ListUsersCommand.h"
+#include "Commands/header/PrintHallCommand.h"
 
 Command* CommandFactory::createCommand(const MyString& commandStr)
 {
@@ -35,6 +34,9 @@ Command* CommandFactory::createCommand(const MyString& commandStr)
     }
     else if (commandStr == "add-balance") {
         return new AddBalanceCommand();
+    }
+    else if (commandStr == "wallet") {
+        return new PrintBalanceCommand();
     }
     else if (commandStr == "buy-ticket") {
         return new BuyTicketCommand();
@@ -63,21 +65,27 @@ Command* CommandFactory::createCommand(const MyString& commandStr)
     else if (commandStr == "update-movie-hall") {
         return new UpdateMovieHallCommand();
     }
-    //else if (commandStr == "list-tickets") {
-    //    return new ListTicketsCommand();
-    //}
-    //else if (commandStr == "list-movies") {
-    //    return new ListMoviesCommand();
-    //}
-    //else if (commandStr == "list-user-history") {
-    //    return new ListUserHistory();
-    //}
-    //else if (commandStr == "list-user-tickets") {
-    //    return new ListUserTickets();
-    //}
-    //else if (commandStr == "list-users") {
-    //    return new ListUsers();
-    //}
+    else if (commandStr == "list-history") {
+        return new ListHistoryCommand();
+    }
+    else if (commandStr == "list-tickets") {
+        return new ListTicketsCommand();
+    }
+    else if (commandStr == "list-movies") {
+        return new ListMoviesCommand();
+    }
+    else if (commandStr == "list-user-history") {
+        return new ListUserHistoryCommand();
+    }
+    else if (commandStr == "list-user-tickets") {
+        return new ListUserTicketsCommand();
+    }
+    else if (commandStr == "list-users") {
+        return new ListUsersCommand();
+    }
+    else if (commandStr == "view-hall") {
+        return new PrintHallCommand();
+    }
 
     return nullptr;
 }

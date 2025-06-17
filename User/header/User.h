@@ -17,6 +17,9 @@ public:
 	int getId() const;
 	const MyString& getName() const;
 	const MyString& getPassword() const;
+	const MyVector<Ticket>& getTickets() const;
+	const MyVector<int>& getCatalogue() const;
+	double getBalance() const;
 
 	static void setNextId(int nextId);
 

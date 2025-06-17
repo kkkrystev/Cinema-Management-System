@@ -9,6 +9,9 @@ public:
 	DocumentaryMovie(const MyString& title, int releaseYear, int duration, int hallId, 
 		const Date& screeningDate, const TimeInterval& screeningHours, Theme theme, bool isBasedOnTrueEvents);
 
+	void printAsUpcoming() const override;
+	void printAsPast() const override;
+
 	Movie* clone() const override;
 	Genre getGenre() const override;
 	double getTicketPrice() const override;

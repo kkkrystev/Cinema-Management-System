@@ -3,7 +3,11 @@
 const MyString Admin::ADMMIN_NAME = "Admin";
 const MyString Admin::ADMIN_PASSWORD = "0000";
 
-Admin::Admin() : User(ADMMIN_NAME, ADMIN_PASSWORD) {}
+Admin::Admin() : User(ADMMIN_NAME, ADMIN_PASSWORD) 
+{
+	id = 0;
+	s_nextId = 100;
+}
 
 User* Admin::clone() const
 {

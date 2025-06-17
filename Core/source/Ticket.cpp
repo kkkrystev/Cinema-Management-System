@@ -1,20 +1,20 @@
 #include "Core/header/Ticket.h"
 
-Ticket::Ticket() : movieId(-1), row(-1), col(-1) {}
+Ticket::Ticket() : movieId(-1), row(0), col(0) {}
 
-Ticket::Ticket(int movieId, int row, int col) : movieId(movieId), row(row), col(col) {}
+Ticket::Ticket(int movieId, size_t row, size_t col) : movieId(movieId), row(row), col(col) {}
 
 int Ticket::getMovieId() const
 {
 	return movieId;
 }
 
-int Ticket::getRow() const
+size_t Ticket::getRow() const
 {
 	return row;
 }
 
-int Ticket::getCol() const
+size_t Ticket::getCol() const
 {
 	return col;
 }

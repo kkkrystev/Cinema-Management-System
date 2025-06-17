@@ -2,7 +2,8 @@
 
 void BuyTicketCommand::execute(System* system) const
 {
-	int movieId, row, col;
+	int movieId;
+	size_t row, col;
 
 	std::cin >> movieId >> row >> col;
 

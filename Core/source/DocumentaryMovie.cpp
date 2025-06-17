@@ -1,25 +1,13 @@
 #include "Core/header/DocumentaryMovie.h"
 
-DocumentaryMovie::DocumentaryMovie() : Movie(), theme(Theme::Unknown), isBasedOnTrueEvents(false) {}
+DocumentaryMovie::DocumentaryMovie() : Movie(), theme(Theme::Invalid), isBasedOnTrueEvents(false) {}
 
-DocumentaryMovie::DocumentaryMovie(const MyString& title, int releaseYear, int duration, int hallId,
-	const Date& screeningDate, const TimeInterval& screeningHours, Theme theme, bool isBasedOnTrueEvents)
-	: Movie(title, releaseYear, duration, hallId, screeningDate, screeningHours), theme(theme), isBasedOnTrueEvents(isBasedOnTrueEvents) {}
+DocumentaryMovie::DocumentaryMovie(const MyString& title, unsigned releaseYear, unsigned duration, Theme theme, bool isBasedOnTrueEvents)
+	: Movie(title, releaseYear, duration), theme(theme), isBasedOnTrueEvents(isBasedOnTrueEvents) {}
 
-void DocumentaryMovie::printAsUpcoming() const
+void DocumentaryMovie::print() const
 {
-	Movie::printAsUpcoming();
-	std::cout << " | Theme: " << themeToString(theme);
-
-	if (isBasedOnTrueEvents)
-		std::cout << ", Based on true events";
-	else
-		std::cout << ", Not based on true events";
-}
-
-void DocumentaryMovie::printAsPast() const
-{
-	Movie::printAsPast();
+	Movie::print();
 	std::cout << " | Theme: " << themeToString(theme);
 
 	if (isBasedOnTrueEvents)

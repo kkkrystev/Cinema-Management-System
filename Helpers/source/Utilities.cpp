@@ -1,5 +1,5 @@
 #include "Helpers/header/Utilities.h"
-#include <fstream>;
+#include <fstream>
 
 size_t getFileSize(std::ifstream& file)
 {
@@ -16,7 +16,7 @@ MyString genreToString(Genre genre)
 	case Genre::Action		: return MyString("Action");
 	case Genre::Drama		: return MyString("Drama");
 	case Genre::Documentary : return MyString("Documentary");
-	default					: return MyString("Unknown");
+	default					: return MyString("Invalid");
 	}
 }
 
@@ -25,7 +25,7 @@ MyString roleToString(Role role)
 	switch (role) {
 	case Role::Admin  : return MyString("Admin");
 	case Role::Regular: return MyString("Regular");
-	default			  : return MyString("Unknown");
+	default			  : return MyString("Invalid");
 	}
 }
 
@@ -35,7 +35,7 @@ MyString themeToString(Theme theme)
 	case Theme::Nature			: return MyString("Nature");
 	case Theme::History			: return MyString("History");
 	case Theme::HistoricalFigure: return MyString("HistoricalFigure");
-	default						: return MyString("Unknown");
+	default						: return MyString("Invalid");
 	}
 }
 
@@ -44,20 +44,14 @@ Genre stringToGenre(const MyString& genreStr)
 	if (genreStr == "Action" || genreStr == "action")				 return Genre::Action;
 	else if (genreStr == "Drama" || genreStr == "drama")			 return Genre::Drama;
 	else if (genreStr == "Documentary" || genreStr == "documentary") return Genre::Documentary;
+	else															 return Genre::Invalid;
 }
 
 Theme stringToTheme(const MyString& themeStr)
 {
-	if (themeStr == "nature" || themeStr == "Nature") {
-		return Theme::Nature;
-	}
-	else if (themeStr == "history" || themeStr == "History") {
-		return Theme::History;
-	}
-	else if (themeStr == "historical-figure" || themeStr == "Historical-figure") {
-		return Theme::HistoricalFigure;
-	}
-	else {
-		return Theme::Unknown;
-	}
+	if (themeStr == "nature" || themeStr == "Nature")							 return Theme::Nature;
+	else if (themeStr == "history" || themeStr == "History")					 return Theme::History;
+	else if (themeStr == "historical-figure" || themeStr == "Historical-figure") return Theme::HistoricalFigure;
+	else                                                                         return Theme::Invalid;
+	
 }

@@ -6,10 +6,5 @@ void ListUserTicketsCommand::execute(System* system) const
 
 	std::cin >> userId;
 
-	try {
-		system->listUserTickets(userId);
-	}
-	catch (std::exception& e) {
-		std::cout << e.what() << '\n';
-	}
+	system->listUserTickets(userId);
 }

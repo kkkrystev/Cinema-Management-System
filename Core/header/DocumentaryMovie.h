@@ -6,11 +6,9 @@ class DocumentaryMovie : public Movie
 {
 public:
 	DocumentaryMovie();
-	DocumentaryMovie(const MyString& title, int releaseYear, int duration, int hallId, 
-		const Date& screeningDate, const TimeInterval& screeningHours, Theme theme, bool isBasedOnTrueEvents);
+	DocumentaryMovie(const MyString& title, unsigned releaseYear, unsigned duration, Theme theme, bool isBasedOnTrueEvents);
 
-	void printAsUpcoming() const override;
-	void printAsPast() const override;
+	void print() const override;
 
 	Movie* clone() const override;
 	Genre getGenre() const override;

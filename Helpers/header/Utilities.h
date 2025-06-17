@@ -12,18 +12,20 @@ size_t getFileSize(std::ifstream& file);
 
 enum class Role {
 	Admin,
-	Regular
+	Regular,
+	Invalid
 };
 enum class Genre {
 	Action,
 	Drama,
-	Documentary
+	Documentary,
+	Invalid
 };
 enum class Theme {
 	Nature,
 	History,
 	HistoricalFigure,
-	Unknown
+	Invalid
 };
 
 MyString genreToString(Genre genre);

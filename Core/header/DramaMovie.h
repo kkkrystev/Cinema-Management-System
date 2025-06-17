@@ -5,11 +5,9 @@ class DramaMovie : public Movie
 {
 public:
 	DramaMovie();
-	DramaMovie(const MyString& title, int releaseYear, int duration, int hallId, 
-		const Date& screeningDate, const TimeInterval& screeningHours, bool hasComedyElements);
+	DramaMovie(const MyString& title, unsigned releaseYear, unsigned duration, bool hasComedyElements);
 
-	void printAsUpcoming() const override;
-	void printAsPast() const override;
+	void print() const override;
 
 	Movie* clone() const override;
 	Genre getGenre() const override;

@@ -7,6 +7,8 @@
 class User
 {
 public:
+	static void setNextId(int nextId);
+
 	User();
 	User(const MyString& name, const MyString& password);
 	virtual ~User() = default;
@@ -21,18 +23,18 @@ public:
 	const MyVector<int>& getCatalogue() const;
 	double getBalance() const;
 
-	static void setNextId(int nextId);
-
 	void saveToBinaryFile(std::ofstream& ofs) const;
 	void loadFromBinaryFile(std::ifstream& ifs);
 
-	bool hasTicket(int movieId) const;
+	bool hasTicket(int screeningId) const;
 	bool isInCatalogue(int movieId) const;
 
 	void addBalance(double sum);
+
 	void buyTicket(const Ticket& ticket, double price);
-	void returnTickets(int movieId, double price);
-	void removeTickets(int movieId);
+	void returnTickets(int screeningId, double price);
+	void removeTickets(int screeningId);
+
 	void addToCatalogue(int movieId);
 	void removeFromCatalogue(int movieId);
 

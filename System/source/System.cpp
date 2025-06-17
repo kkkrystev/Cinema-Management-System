@@ -10,13 +10,16 @@ System::System()
 {
 	loadUsers();
 	loadMovies();
+	loadScreenings();
 	loadHalls();
 	std::cout << '\n';
 }
 System::~System()
 {
+	std::cout << '\n';
 	saveUsers();
 	saveMovies();
+	saveScreenings();
 	saveHalls();
 }
 
@@ -46,7 +49,7 @@ void System::login(const MyString& name, const MyString& password)
 	if (user->getPassword() != password)
 		throw std::invalid_argument("Invalid login password.");
 
-	cleanupExpiredMovies();
+	cleanupExpiredScreenings();
 
 	loggedIn = user;
 	std::cout << "Login successful! Welcome, " << name << "!\n";
@@ -73,41 +76,31 @@ void System::printBalance() const
 
 	std::cout << "Balnce: " << loggedIn->getBalance() << " BGN.\n";
 }
-void System::printHall(int hallId)
+void System::printScreeningHall(int screeningId)
 {
 	if (!loggedIn)
 		throw std::logic_error("You must be logged in to perform this action.");
 
-	Hall* hall = findHallById(hallId);
+	Screening* screening = findScreeningById(screeningId);
+	if (!screening)
+		throw std::invalid_argument("A screening with such ID does NOT exist.");
 
-	if (!hall)
-		throw std::invalid_argument("A hall with such ID does NOT exist.");
-
-	hall->printLayout();
+	screening->printSeats();
 }
-void System::buyTicket(int movieId, size_t row, size_t col)
+void System::buyTicket(int screeningId, size_t row, size_t col)
 {
 	if (!loggedIn)
 		throw std::logic_error("You must be logged in to perform this action.");
 
-	Movie* movie = findMovieById(movieId);
-	if (!movie)
-		throw std::invalid_argument("A movie with such ID does NOT exist.");
-
-	int hallId = movie->getHallId();
-	Hall* hall = findHallById(hallId);
-	if (!hall)
-		throw std::invalid_argument("A hall with such ID does NOT exist.");
+	Screening* screening = findScreeningById(screeningId);
+	Movie* movie = findMovieById(screening->getMovieId());
 
 	if (row == 0 || col == 0)
 		throw std::invalid_argument("Invalid seat coordinates.");
 
-	if (hall->isSeatTaken(row-1, col-1))
-		throw std::invalid_argument("Unfortunately, this seat is already taken.");
+	screening->reserveSeat(row-1, col-1);
 
-	hall->reserveSeat(row-1, col-1);
-
-	Ticket ticket(movieId, row-1, col-1);
+	Ticket ticket(screeningId, row-1, col-1);
 
 	loggedIn->buyTicket(ticket, movie->getTicketPrice());
 	std::cout << "Thank you for purchasing a ticket for " << movie->getTitle() << ".\n";
@@ -118,11 +111,11 @@ void System::rateMovie(int movieId, unsigned rating)
 		throw std::logic_error("You must be logged in to perform this action.");
 
 	if (rating < Constants::MIN_MOVIE_RATING || rating > Constants::MAX_MOVIE_RATING)
-		throw std::invalid_argument("Rating is restricted to a scale from 0 to 5");
+		throw std::invalid_argument("Rating is restricted to a scale from 0 to 5.");
 
 	Movie* movie = findMovieById(movieId);
 	if (!movie)
-		throw std::invalid_argument("A movie with such ID does not exist");
+		throw std::invalid_argument("A movie with such ID does not exist.");
 
 	if (!isMovieInCatalogue(movieId))
 		throw std::logic_error("You can only rate movies you have been to.");
@@ -130,7 +123,7 @@ void System::rateMovie(int movieId, unsigned rating)
 	movie->addToRating(rating);
 	std::cout << "Rating submitted. Movie score updated.\n";
 }
-void System::listMovies() const
+void System::listMovies()
 {
 	if (!loggedIn)
 		throw std::logic_error("You must be logged in to perform this action.");
@@ -140,13 +133,34 @@ void System::listMovies() const
 		return;
 	}
 
+	for (size_t i = 0; i < movies.getSize(); ++i) {
+		std::cout << "[] ";
+		movies[i]->print();
+		std::cout << '\n';
+	}
+}
+void System::listScreenings()
+{
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (screenings.getSize() == 0) {
+		std::cout << "There are no upcoming screenings scheduled for the moment.\n";
+		return;
+	}
+
 	std::cout << "Upcoming screenings:\n";
-	for (size_t i = 0; i < movies.getSize(); i++) {
-		Date date = movies[i]->getScreeningDate();
-		Time start = movies[i]->getScreeningHours().start;
-		Time end = movies[i]->getScreeningHours().end;
+	for (size_t i = 0; i < screenings.getSize(); i++) {
+		Date date = screenings[i].getDate();
+		Time start = screenings[i].getHours().start;
+		Time end = screenings[i].getHours().end;
+
 		if (!isScreeningInPast(date, start, end)) {
-			movies[i]->printAsUpcoming();
+			Movie* movie = findMovieById(screenings[i].getMovieId());
+
+			std::cout << "[] " << movie->getTitle() << " | ";
+			screenings[i].print();
+			std::cout << " | Ticket price: " << movie->getTicketPrice();
 			std::cout << '\n';
 		}
 	}
@@ -169,7 +183,7 @@ void System::listHistory()
 		int movieId = loggedIn->getCatalogue()[i];
 		Movie* movie = findMovieById(movieId);
 
-		movie->printAsPast();
+		movie->print();
 		std::cout << "\n";
 	}
 
@@ -189,21 +203,22 @@ void System::listTickets()
 	for (size_t i = 0; i < ticketCount; i++) {
 		std::cout << "Ticket #" << i + 1 << ": ";
 
-		int movieId = loggedIn->getTickets()[i].getMovieId();
-		Movie* movie = findMovieById(movieId);
+		int screeningId = loggedIn->getTickets()[i].getScreeningId();
+		Screening* screening = findScreeningById(screeningId);
+		Movie* movie = findMovieById(screening->getMovieId());
 
 		std::cout << movie->getTitle() 
-			<< " | " << movie->getScreeningDate() 
-			<< ", " << movie->getScreeningHours()
-			<< " | Hall: " << movie->getHallId() 
-			<< " | Seat: " << loggedIn->getTickets()[i].getRow()+1 << loggedIn->getTickets()[i].getCol()+1 
+			<< " | " << screening->getDate()
+			<< ", " << screening->getHours()
+			<< " | Hall: " << screening->getHallId() 
+			<< " | Seat: " << loggedIn->getTickets()[i].getRow() + 1 << loggedIn->getTickets()[i].getCol() + 1 
 			<< " | " << movie->getTicketPrice() << " BGN"
 			<< "\n";
 	}
 }
 
 // Admin-specific
-void System::addActionMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, unsigned actionIntensity)
+void System::addActionMovie(const MyString& title, unsigned releaseYear, unsigned duration, unsigned actionIntensity)
 {
 	if (!loggedIn)
 		throw std::logic_error("You must be logged in to perform this action.");
@@ -211,19 +226,23 @@ void System::addActionMovie(const MyString& title, unsigned releaseYear, unsigne
 	if (loggedIn->getRole() != Role::Admin)
 		throw std::logic_error("You must be an Admin to perform this action.");
 
-	validateMovieInputData(title, releaseYear, duration, hallId, screeningDate, start, end);
+	if (isMovieTitleTaken(title))
+		throw std::logic_error("A movie with such title already exists.");
+
+	if (!isReleaseYearValid(releaseYear))
+		throw std::invalid_argument("You cannot a movie with a release year in the future.");
 
 	if (actionIntensity > Constants::MAX_ACTION_INTENSITY || actionIntensity < Constants::MIN_ACTION_INTENSITY)
 		throw std::invalid_argument("Action intensity must be in the valid range.");
 
-	Movie* moviePtr = new ActionMovie(title, releaseYear, duration, hallId, screeningDate, TimeInterval(start, end), actionIntensity);
+	Movie* movie = new ActionMovie(title, releaseYear, duration, actionIntensity);
 
-	PolymorphicPtr<Movie> toAdd(moviePtr);
+	PolymorphicPtr<Movie> toAdd(movie);
 
 	movies.push_back(toAdd);
 	std::cout << "Action movie " << title << " successfully added.\n";
 }
-void System::addDocumentaryMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, Theme theme, bool isBasedOnTrueEvents)
+void System::addDocumentaryMovie(const MyString& title, unsigned releaseYear, unsigned duration, Theme theme, bool isBasedOnTrueEvents)
 {
 	if (!loggedIn)
 		throw std::logic_error("You must be logged in to perform this action.");
@@ -231,16 +250,23 @@ void System::addDocumentaryMovie(const MyString& title, unsigned releaseYear, un
 	if (loggedIn->getRole() != Role::Admin)
 		throw std::logic_error("You must be an Admin to perform this action.");
 
-	validateMovieInputData(title, releaseYear, duration, hallId, screeningDate, start, end);
+	if (isMovieTitleTaken(title))
+		throw std::logic_error("A movie with such title already exists.");
 
-	Movie* moviePtr = new DocumentaryMovie(title, releaseYear, duration, hallId, screeningDate, TimeInterval(start, end), theme, isBasedOnTrueEvents);
+	if (!isReleaseYearValid(releaseYear))
+		throw std::invalid_argument("You cannot a movie with a release year in the future.");
 
-	PolymorphicPtr<Movie> toAdd(moviePtr);
+	if (theme == Theme::Invalid)
+		throw std::invalid_argument("You cannot create a movie with an invalid theme type.");
+
+	Movie* movie = new DocumentaryMovie(title, releaseYear, duration, theme, isBasedOnTrueEvents);
+
+	PolymorphicPtr<Movie> toAdd(movie);
 
 	movies.push_back(toAdd);
 	std::cout << "Documentary movie " << title << " successfully added.\n";
 }
-void System::addDramaMovie(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end, bool hasComedyElements)
+void System::addDramaMovie(const MyString& title, unsigned releaseYear, unsigned duration, bool hasComedyElements)
 {
 	if (!loggedIn)
 		throw std::logic_error("You must be logged in to perform this action.");
@@ -248,14 +274,84 @@ void System::addDramaMovie(const MyString& title, unsigned releaseYear, unsigned
 	if (loggedIn->getRole() != Role::Admin)
 		throw std::logic_error("You must be an Admin to perform this action.");
 
-	validateMovieInputData(title, releaseYear, duration, hallId, screeningDate, start, end);
+	if (isMovieTitleTaken(title))
+		throw std::logic_error("A movie with such title already exists.");
 
-	Movie* moviePtr = new DramaMovie(title, releaseYear, duration, hallId, screeningDate, TimeInterval(start, end), hasComedyElements);
+	if (!isReleaseYearValid(releaseYear))
+		throw std::invalid_argument("You cannot a movie with a release year in the future.");
 
-	PolymorphicPtr<Movie> toAdd(moviePtr);
+	Movie* movie = new DramaMovie(title, releaseYear, duration,  hasComedyElements);
+
+	PolymorphicPtr<Movie> toAdd(movie);
 
 	movies.push_back(toAdd);
 	std::cout << "Drama movie " << title << " successfully added.\n";
+}
+void System::addScreening(int movieId, int hallId, const Date& date, const Time& start, const Time& end)
+{
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
+
+	Movie* movie = findMovieById(movieId);
+	if (!movie)
+		throw std::invalid_argument("A movie with such ID does NOT exist.");
+
+	Hall* hall = findHallById(hallId);
+	if (!hall)
+		throw std::invalid_argument("A hall with such ID does NOT exist.");
+
+	if (isScreeningInPast(date, start, end) || isScreeningOngoing(date, start, end))
+		throw std::invalid_argument("You cannot schedule a screening for a past or ongoing moment in time.");
+
+	if (start >= end) 
+		throw std::invalid_argument("Invalid screening hours provided.");
+
+	if (!areScreeningHoursValid(movie->getDuration(), start, end))
+		throw std::invalid_argument("Provided duration does not match the provided time range.");
+
+	if (doOverlappingScreeningsExist(hallId, date, start, end))
+		throw std::logic_error("Overlapping screening found in the same hall.");
+
+	Screening screening(movieId, hallId, hall->getRows(), hall->getCols(), date, TimeInterval(start, end));
+	
+	std::cout << "A new screening of " << movie->getTitle() << " successfully scheduled.\n";
+	screenings.push_back(std::move(screening));
+}
+void System::removeScreening(int screeningId)
+{
+	if (!loggedIn)
+		throw std::logic_error("You must be logged in to perform this action.");
+
+	if (loggedIn->getRole() != Role::Admin)
+		throw std::logic_error("You must be an Admin to perform this action.");
+
+	Screening* screening = findScreeningById(screeningId);
+	if (!screening)
+		throw std::invalid_argument("A screening with such ID does NOT exist.");
+
+	Date date = screening->getDate();
+	Time start = screening->getHours().start;
+	Time end = screening->getHours().end;
+
+	if (isScreeningOngoing(date, start, end)) {
+		throw std::runtime_error("Cannot remove a screening while it is still ongoing.");
+	}
+	else if (isScreeningInPast(date, start, end)) {
+		addToUserCatalogues(screening);
+		std::cout << "Screening is in the past. Adding movie to user cataloges...\n";
+	}
+	else {
+		returnUsersTickets(screening);
+		std::cout << "Screening was sheduled for the future. Restoring the amout paid by users...\n";
+	}
+
+	Movie* movie = findMovieById(screening->getMovieId());
+
+	std::cout << "A screening of " << movie->getTitle() << " with ID " << screening->getId() << " removed successfully.\n";
+	removeScreeningFromList(screening->getId());
 }
 void System::removeMovie(int movieId)
 {
@@ -269,21 +365,40 @@ void System::removeMovie(int movieId)
 	if (!movie)
 		throw std::invalid_argument("A movie with such ID does NOT exist");
 
-	Date screeningDate = movie->getScreeningDate();
-	Time start = movie->getScreeningHours().start;
-	Time end = movie->getScreeningHours().end;
+	if (doesMovieHaveOngoingScreenings(movieId)) 
+		throw std::logic_error("You cannot remove a movie while it still has ongoing screenings.");
+	
+	bool hadPastScreenings = false;
+	bool hadFutureScreenings = false;
 
-	if (isScreeningOngoing(screeningDate, start, end)) {
-		throw std::runtime_error("Cannot remove a movie during its screening.");
+	for (size_t i = 0; i < screenings.getSize(); ++i) {
+		if (screenings[i].getMovieId() == movieId) {
+			Date date = screenings[i].getDate();
+			Time start = screenings[i].getHours().start;
+			Time end = screenings[i].getHours().end;
+
+			if (isScreeningInPast(date, start, end)) {
+				addToUserCatalogues(&screenings[i]);
+				hadPastScreenings = true;
+			}
+			else {
+				returnUsersTickets(&screenings[i]);
+				hadFutureScreenings = true;
+			}
+
+			removeScreeningFromList(screenings[i].getId());
+			i--;
+		}
 	}
-	else if (isScreeningInPast(screeningDate, start, end)) {
-		addToUserCatalogues(movie->getId());
-		std::cout << "Adding movie to user cataloges...\n";
-	}
-	else {
-		returnUsersTickets(movie);
-		std::cout << "Removing user tickets and restoring the amount paid by users...\n";
-	}
+	
+	if (hadPastScreenings && !hadFutureScreenings)
+		std::cout << "All screenings were in the past. Movie added to user catalogues.\n";
+	else if (!hadPastScreenings && hadFutureScreenings)
+		std::cout << "All screenings were in the future. User payments were refunded.\n";
+	else if (hadPastScreenings && hadFutureScreenings)
+		std::cout << "Movie had both past and future screenings. Both user catalogue addition and payment refund were applied.\n";
+	else
+		std::cout << "Movie had no associated screenings.\n";
 
 	std::cout << "Movie " << movie->getTitle() << " removed successfully.\n";
 	removeMovieFromList(movieId);	
@@ -336,39 +451,43 @@ void System::closeHall(int hallId)
 	if (!hall)
 		throw std::invalid_argument("A hall with such ID does NOT exist.");
 
-	for (size_t i = 0; i < movies.getSize(); i++) {
-		if (movies[i]->getHallId() == hallId) {
-			Date screeningDate = movies[i]->getScreeningDate();
-			Time screeningStart = movies[i]->getScreeningHours().start;
-			Time screeningEnd = movies[i]->getScreeningHours().end;
+	if (doesHallHaveOngoingScreenings(hallId))
+		throw std::logic_error("You cannot close a hall during a screening.");
 
-			if (isScreeningOngoing(screeningDate, screeningStart, screeningEnd))
-				throw std::logic_error("You cannot close a hall during a screening.");
-		}
-	}
+	bool hadPastScreenings = false;
+	bool hadFutureScreenings = false;
 
-	for (size_t i = 0; i < movies.getSize(); i++) {
-		if (movies[i]->getHallId() == hallId) {
-			Date screeningDate = movies[i]->getScreeningDate();
-			Time screeningStart = movies[i]->getScreeningHours().start;
-			Time screeningEnd = movies[i]->getScreeningHours().end;
+	for (size_t i = 0; i < screenings.getSize(); ++i) {
+		if (screenings[i].getHallId() == hallId) {
+			Date date = screenings[i].getDate();
+			Time start = screenings[i].getHours().start;
+			Time end = screenings[i].getHours().end;
 
-			if (isScreeningInPast(screeningDate, screeningStart, screeningEnd)) {
-				movies[i]->setHallId(-1);
+			if (isScreeningInPast(date, start, end)) {
+				addToUserCatalogues(&screenings[i]);
+				hadPastScreenings = true;
 			}
 			else {
-				returnUsersTickets(movies[i].get());
+				returnUsersTickets(&screenings[i]);
+				hadFutureScreenings = true;
 			}
+
+			removeScreeningFromList(screenings[i].getId());
+			i--;
 		}
 	}
 
-	for (size_t i = 0; i < halls.getSize(); i++) {
-		if (halls[i].getId() == hallId) {
-			halls.erase(i);
-			break;
-		}
-	}
+	if (hadPastScreenings && !hadFutureScreenings)
+		std::cout << "All screenings were in the past. Movies added to user catalogues.\n";
+	else if (!hadPastScreenings && hadFutureScreenings)
+		std::cout << "All screenings were in the future. User payments were refunded.\n";
+	else if (hadPastScreenings && hadFutureScreenings)
+		std::cout << "Hall had both past and future screenings. Both catalogue additions and refunds applied.\n";
+	else
+		std::cout << "Hall had no associated screenings.\n";
+
 	std::cout << "Successfully closed hall " << hallId << ".\n";
+	removeHallFromList(hallId);
 }
 void System::updateMovieTitle(int movieId, const MyString& newTitle)
 {
@@ -385,15 +504,13 @@ void System::updateMovieTitle(int movieId, const MyString& newTitle)
 	if (movie->getTitle() == newTitle)
 		throw std::logic_error("The new movie title must be different than the old one.");
 
-	for (size_t i = 0; i < movies.getSize(); i++) {
-		if (movies[i]->getTitle() == newTitle)
-			throw std::logic_error("A movie with such title already exists.");
-	}
+	if (isMovieTitleTaken(newTitle))
+		throw std::logic_error("A movie with such title already exists.");
 
 	std::cout << "Successfully changed " << movie->getTitle() << " to " << newTitle << ".\n";
 	movie->setTitle(newTitle);
 }
-void System::updateMovieHall(int movieId, int newHallId)
+void System::updateScreeningHall(int screeningId, int newHallId)
 {
 	if (!loggedIn)
 		throw std::logic_error("You must be logged in to perform this action.");
@@ -401,26 +518,26 @@ void System::updateMovieHall(int movieId, int newHallId)
 	if (loggedIn->getRole() != Role::Admin)
 		throw std::logic_error("You must be an Admin to perform this action.");
 
-	Movie* movie = findMovieById(movieId);
-	if (!movie)
-		throw std::invalid_argument("A movie with such ID does not exist.");
+	Screening* screening = findScreeningById(screeningId);
+	if (!screening)
+		throw std::invalid_argument("A screening with such ID does NOT exist.");
 
-	if (movie->getHallId() == newHallId)
+	if(screening->getHallId() == newHallId)
 		throw std::logic_error("The new hall must be different than the current one.");
 
 	Hall* hall = findHallById(newHallId);
 	if (!hall)
 		throw std::invalid_argument("A hall with such ID does not exist.");
 
-	Date date = movie->getScreeningDate();
-	Time start = movie->getScreeningHours().start;
-	Time end = movie->getScreeningHours().end;
+	Date date = screening->getDate();
+	Time start = screening->getHours().start;
+	Time end = screening->getHours().end;
 
-	if (doScreeningsOverlap(newHallId, date, start, end))
+	if (doOverlappingScreeningsExist(newHallId, date, start, end))
 		throw std::logic_error("Overlapping screening found in the new hall.");
 
-	std::cout << "Successfully moved " << movie->getTitle() << " to hall " << newHallId << ".\n";
-	movie->setHallId(newHallId);
+	std::cout << "Successfully screening with ID " << screeningId << " to hall " << newHallId << ".\n";
+	screening->setHallId(newHallId);
 }
 void System::listUserHistory(int userId) 
 {
@@ -446,13 +563,9 @@ void System::listUserHistory(int userId)
 		int movieId = user->getCatalogue()[i];
 		Movie* movie = findMovieById(movieId);
 
-		std::cout << "[] "
-			<< movie->getId()
-			<< " | " << movie->getTitle()
-			<< " | " << movie->getScreeningDate()
-			<< ", " << movie->getScreeningHours()
-			<< "\n";
-			
+		std::cout << "[" << i + 1 << "] ";
+		movie->print();
+		std::cout << '\n';
 	}
 }
 void System::listUserTickets(int userId) 
@@ -474,17 +587,17 @@ void System::listUserTickets(int userId)
 		return;
 	}
 
-	std::cout << user->getName() << "'list of tickets:\n";
+	std::cout << user->getName() << "'s list of tickets:\n";
 	for (size_t i = 0; i < ticketCount; i++) {
-		int movieId = user->getTickets()[i].getMovieId();
-		Movie* movie = findMovieById(movieId);
+		int screeningId = user->getTickets()[i].getScreeningId();
+		Screening* screening = findScreeningById(screeningId);
+		Movie* movie = findMovieById(screening->getMovieId());
 
-		std::cout << "[] "
-			<< movie->getId()
-			<< " | " << movie->getTitle()
-			<< " | " << movie->getScreeningDate()
-			<< ", " << movie->getScreeningHours()
-			<< " | Hall: " << movie->getHallId()
+		std::cout << "[" << i + 1 << "] "
+			<< movie->getTitle()
+			<< " | " << screening->getDate()
+			<< ", " << screening->getHours()
+			<< " | Hall: " << screening->getHallId()
 			<< " | Seat: " << loggedIn->getTickets()[i].getRow()+1 << '-' << loggedIn->getTickets()[i].getCol() + 1
 			<< " | " << movie->getTicketPrice() << " BGN"
 			<< "\n";
@@ -548,6 +661,24 @@ void System::saveMovies() const
 
 	ofs.close();
 	std::cout << "Movies saved successfully!\n";
+}
+void System::saveScreenings() const
+{
+	std::ofstream ofs("screenings.dat", std::ios::binary);
+	if (!ofs.is_open()) {
+		std::cout << "Can't open screenings.dat when trying to save\n";
+		return;
+	}
+
+	size_t count = screenings.getSize();
+	ofs.write((const char*)&count, sizeof(count));
+
+	for (size_t i = 0; i < count; ++i) {
+		screenings[i].saveToBinaryFile(ofs);
+	}
+
+	ofs.close();
+	std::cout << "Screenings saved successfully!\n";
 }
 void System::saveHalls() const
 {
@@ -679,6 +810,44 @@ void System::loadMovies()
 	ifs.close();
 	std::cout << "Movies loaded successfully!\n";
 }
+void System::loadScreenings()
+{
+	std::ifstream ifs("screenings.dat", std::ios::binary);
+	if (!ifs.is_open()) {
+		std::cout << "Can't open screenings.dat when trying to load...";
+
+		std::ofstream ofs("screenings.dat", std::ios::binary);
+		if (!ofs.is_open()) {
+			std::cout << "Failed to create screenings.dat\n";
+			return;
+		}
+
+		std::cout << "A new screenings.dat has been created successfully!\n";
+		screenings.clear();
+		return;
+	}
+
+	if (getFileSize(ifs) == 0) {
+		std::cout << "No screenings to load. Continuing...\n";
+		return;
+	}
+
+	size_t count;
+	ifs.read((char*)&count, sizeof(count));
+
+	screenings.clear();
+	for (size_t i = 0; i < count; ++i) {
+		Screening s;
+		s.loadFromBinaryFile(ifs);
+		screenings.push_back(s);
+	}
+
+	if (!screenings.empty())
+		Screening::setNextId(screenings.back().getId() + 1);
+
+	ifs.close();
+	std::cout << "Screenings loaded successfully!\n";
+}
 void System::loadHalls()
 {
 	std::ifstream ifs("halls.dat", std::ios::binary);
@@ -742,15 +911,32 @@ Movie* System::findMovieById(int id)
 	}
 	return nullptr;
 }
+Screening* System::findScreeningById(int id)
+{
+	for (size_t i = 0; i < screenings.getSize(); i++) {
+		if (screenings[i].getId() == id)
+			return &screenings[i];
+	}
+	return nullptr;
+}
 Hall* System::findHallById(int id)
 {
 	for (size_t i = 0; i < halls.getSize(); i++) {
-		if (halls[i].getId() == id) return &halls[i];
+		if (halls[i].getId() == id) 
+			return &halls[i];
 	}
 	return nullptr;
 }
 
 // Checks
+bool System::isMovieTitleTaken(const MyString& title) const
+{
+	for (size_t i = 0; i < movies.getSize(); i++) {
+		if (movies[i]->getTitle() == title)
+			return true;
+	}
+	return false;
+}
 bool System::isNameTaken(const MyString& name) const
 {
 	for (size_t i = 0; i < users.getSize(); i++) {
@@ -760,7 +946,12 @@ bool System::isNameTaken(const MyString& name) const
 
 	return false;
 }
-bool System::isDurationValid(unsigned duration, const Time& start, const Time& end) const
+bool System::isReleaseYearValid(unsigned releaseYear) const
+{
+	Date now;
+	return (int)releaseYear <= now.getYear();
+}
+bool System::areScreeningHoursValid(unsigned duration, const Time& start, const Time& end) const
 {
 	unsigned actualDuration = end.toMinutes() - start.toMinutes();
 	return duration == actualDuration;
@@ -782,11 +973,12 @@ bool System::isScreeningInPast(const Date& screeningDate, const Time& start, con
 
 	return false;
 }
-bool System::doScreeningsOverlap(int hallId, const Date& screeningDate, const Time& start, const Time& end) const
+bool System::doOverlappingScreeningsExist(int hallId, const Date& screeningDate, const Time& start, const Time& end) const
 {
-	for (size_t i = 0; i < movies.getSize(); i++) {
-		if (movies[i]->getHallId() == hallId && movies[i]->getScreeningDate() == screeningDate &&
-			doIntervalsOverlap(movies[i]->getScreeningHours(), TimeInterval(start, end))) {
+	for (size_t i = 0; i < screenings.getSize(); i++) {
+		if (screenings[i].getHallId() == hallId 
+			&& screenings[i].getDate() == screeningDate 
+			&& doIntervalsOverlap(screenings[i].getHours(), TimeInterval(start, end))) {
 			return true;
 		}
 	}
@@ -800,46 +992,60 @@ bool System::isMovieInCatalogue(int movieId) const
 	}
 	return false;
 }
+bool System::doesMovieHaveOngoingScreenings(int movieId) const
+{
+	for (size_t i = 0; i < screenings.getSize(); ++i) {
+		if (screenings[i].getMovieId() == movieId) {
+			Date date = screenings[i].getDate();
+			Time start = screenings[i].getHours().start;
+			Time end = screenings[i].getHours().end;
+
+			if (isScreeningOngoing(date, start, end)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+bool System::doesHallHaveOngoingScreenings(int hallId) const
+{
+	for (size_t i = 0; i < screenings.getSize(); ++i) {
+		if (screenings[i].getHallId() == hallId) {
+			Date date = screenings[i].getDate();
+			Time start = screenings[i].getHours().start;
+			Time end = screenings[i].getHours().end;
+
+			if (isScreeningOngoing(date, start, end)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 // Isolated and repetitive logic
-void System::validateMovieInputData(const MyString& title, unsigned releaseYear, unsigned duration, int hallId, const Date& screeningDate, const Time& start, const Time& end)
+void System::cleanupExpiredScreenings()
 {
-	for (size_t i = 0; i < movies.getSize(); i++) {
-		if (movies[i]->getTitle() == title)
-			throw std::logic_error("A movie with such title already exists.");
-	}
+	for (size_t i = 0; i < screenings.getSize(); ) {
+		Date date = screenings[i].getDate();
+		Time start = screenings[i].getHours().start;
+		Time end = screenings[i].getHours().end;
 
-	Date now;
-	if ((int)releaseYear > now.getYear())
-		throw std::invalid_argument("You cannot a movie whose release year is in the future.");
-
-	if (!findHallById(hallId))
-		throw std::invalid_argument("A hall with such ID does NOT exist.");
-
-	if (doScreeningsOverlap(hallId, screeningDate, start, end))
-		throw std::logic_error("Overlapping screening found in the same hall.");
-
-	if (start >= end) throw std::invalid_argument("Invalid screening hours provided."); // another solution is std::swap() 
-
-	if (!isDurationValid(duration, start, end))
-		throw std::invalid_argument("Provided duration does not match the provided time range.");
-
-	if (isScreeningInPast(screeningDate, start, end))
-		throw std::invalid_argument("You are not allowed to add a movie whose screening is in a past moment in time.");
-}
-void System::cleanupExpiredMovies()
-{
-	for (size_t i = 0; i < movies.getSize(); ) {
-		Movie* movie = movies[i].get();
-		Date screeningDate = movie->getScreeningDate();
-		Time screeningStart = movie->getScreeningHours().start;
-		Time screeningEnd = movie->getScreeningHours().end;
-
-		if (isScreeningInPast(screeningDate, screeningStart, screeningEnd)) {
-			int expiredMovieId = movie->getId();
-			addToUserCatalogues(expiredMovieId);
+		if (isScreeningInPast(date, start, end)) {
+			int expiredScreeningId = screenings[i].getId();
+			addToUserCatalogues(&screenings[i]);
+			removeScreeningFromList(expiredScreeningId);
 		}
-		else ++i;
+		else i++;
+	}
+}
+void System::removeScreeningFromList(int screeningId)
+{
+	for (size_t i = 0; i < screenings.getSize(); ++i) {
+		if (screenings[i].getId() == screeningId) {
+			screenings.erase(i);
+			return;
+		}
 	}
 }
 void System::removeMovieFromList(int movieId)
@@ -851,19 +1057,33 @@ void System::removeMovieFromList(int movieId)
 		}
 	}
 }
-void System::returnUsersTickets(Movie* movie)
+void System::removeHallFromList(int hallId)
 {
-	int movieId = movie->getId();
+	for (size_t i = 0; i < halls.getSize(); i++) {
+		if (halls[i].getId() == hallId) {
+			halls.erase(i);
+			return;
+		}
+	}
+}
+void System::returnUsersTickets(Screening* screening)
+{
+	int screeningId = screening->getId();
+	Movie* movie = findMovieById(screening->getMovieId());
 	double ticketPrice = movie->getTicketPrice();
 
 	for (size_t i = 0; i < users.getSize(); i++) {
-		users[i]->returnTickets(movieId, ticketPrice);
+		users[i]->returnTickets(screeningId, ticketPrice);
 	}
 }
-void System::addToUserCatalogues(int movieId)
+void System::addToUserCatalogues(Screening* screening)
 {
+	int screeningId = screening->getId();
+	Movie* movie = findMovieById(screening->getMovieId());
+	int movieId = movie->getId();
+
 	for (size_t i = 0; i < users.getSize(); i++) {
-		if (users[i]->hasTicket(movieId)) {
+		if (users[i]->hasTicket(screeningId)) {
 			users[i]->addToCatalogue(movieId);
 		}
 	}

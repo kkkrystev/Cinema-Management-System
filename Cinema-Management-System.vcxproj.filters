@@ -12,163 +12,119 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{4e3b5a5b-19d5-4096-8472-bd6c66822069}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{37dd28a5-a135-4b0b-ba0e-b885cf91a1a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{88e275dc-ba5c-43c2-a9af-a4746dab2c74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Helpers">
-      <UniqueIdentifier>{4c1f5264-2d3d-4b51-b44a-aa15f267beb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Helpers">
-      <UniqueIdentifier>{3af02bcc-bd4e-46a9-a04b-643443baaadf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\User">
-      <UniqueIdentifier>{7d6d9354-760a-4bca-9a48-400e3dfb56a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\User">
-      <UniqueIdentifier>{e6cf4c0b-b74a-42ee-b72a-f5074fa38254}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\System">
-      <UniqueIdentifier>{0bd31011-38c9-4b5d-b485-2327c3b70e89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\System">
-      <UniqueIdentifier>{67509d17-a39e-46db-bf7d-9e48ba38182a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Commands">
-      <UniqueIdentifier>{ac7632be-bed1-493c-9128-f85167262f7d}</UniqueIdentifier>
+      <UniqueIdentifier>{b1c0e9f2-69a5-4d45-be55-8a6fc192f244}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Commands">
-      <UniqueIdentifier>{083f372a-8dd9-457c-b36e-f70c85ca1e93}</UniqueIdentifier>
+      <UniqueIdentifier>{c1edb0a1-957e-40f5-9909-5d1cf1f2cff6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{74a39f27-d55e-432f-a2c5-5a32af051283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{40eeb60d-6b9d-4356-a26c-4fb73e56dda1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\User">
+      <UniqueIdentifier>{079a9b3e-2284-4036-9923-cd1daa326e0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\User">
+      <UniqueIdentifier>{44c80e69-960d-4ec6-94da-37c8089f76f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Hepers">
+      <UniqueIdentifier>{e68e83b8-f74d-4fd0-b295-35ffedee4640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Helpers">
+      <UniqueIdentifier>{f81cd0c8-ea1d-4502-94e4-a4fe0d1051f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{e5c36540-893d-4237-a3f4-09aa3d7bb36f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{0eb09616-6d2f-490e-8da1-7063da3b8f67}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\header\ActionMovie.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\header\DocumentaryMovie.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\header\DramaMovie.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\header\Hall.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\header\Ticket.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\header\Date.h">
-      <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\header\MyString.h">
-      <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\header\MyVector.hpp">
-      <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\header\Time.h">
-      <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\header\Utilities.h">
-      <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="User\header\User.h">
-      <Filter>Header Files\User</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\header\Movie.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="User\header\Admin.h">
-      <Filter>Header Files\User</Filter>
-    </ClInclude>
-    <ClInclude Include="User\header\RegularUser.h">
-      <Filter>Header Files\User</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\header\TimeInterval.h">
-      <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="System\header\System.h">
-      <Filter>Header Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\header\PolymorphicPtr.hpp">
-      <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="System\header\SystemLauncher.h">
-      <Filter>Header Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\Command.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\CommandFactory.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\AddBalanceCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\AddMovieCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\BuyTicketCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\LoginCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\LogoutCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\RateMovieCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\RegisterCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\CloseHallCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\OpenHallCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\RemoveMovieCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\RemoveUserCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\UpdateMovieTitleCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\UpdateMovieHallCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\ListHistoryCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\ListMoviesCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\ListTicketsCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\ListUserHistoryCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\ListUsersCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\ListUserTicketsCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\PrintBalanceCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands\header\PrintHallCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\AddBalanceCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\AddMovieCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\AddScreeningCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\BuyTicketCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\CloseHallCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\Command.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\CommandFactory.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\ListHistoryCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\ListMoviesCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\ListScreeningsCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\ListTicketsCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\ListUserHistoryCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\ListUsersCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\ListUserTicketsCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\LoginCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\LogoutCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\OpenHallCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\PrintBalanceCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\RateMovieCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\RegisterCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\RemoveMovieCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\RemoveScreeningCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\RemoveUserCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\UpdateMovieTitleCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\UpdateScreeningHallCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\source\ViewScreeningHallCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
     <ClCompile Include="Core\source\ActionMovie.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -184,6 +140,9 @@
     <ClCompile Include="Core\source\Movie.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\source\Screening.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
     <ClCompile Include="Core\source\Ticket.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -196,19 +155,10 @@
     <ClCompile Include="Helpers\source\Time.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="Helpers\source\Utilities.cpp">
+    <ClCompile Include="Helpers\source\TimeInterval.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="User\source\User.cpp">
-      <Filter>Source Files\User</Filter>
-    </ClCompile>
-    <ClCompile Include="User\source\Admin.cpp">
-      <Filter>Source Files\User</Filter>
-    </ClCompile>
-    <ClCompile Include="User\source\RegularUser.cpp">
-      <Filter>Source Files\User</Filter>
-    </ClCompile>
-    <ClCompile Include="Helpers\source\TimeInterval.cpp">
+    <ClCompile Include="Helpers\source\Utilities.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="System\source\System.cpp">
@@ -217,77 +167,151 @@
     <ClCompile Include="System\source\SystemLauncher.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
-    <ClCompile Include="Commands\source\CommandFactory.cpp">
-      <Filter>Source Files\Commands</Filter>
+    <ClCompile Include="User\source\Admin.cpp">
+      <Filter>Source Files\User</Filter>
     </ClCompile>
-    <ClCompile Include="Commands\source\AddBalanceCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
+    <ClCompile Include="User\source\RegularUser.cpp">
+      <Filter>Source Files\User</Filter>
     </ClCompile>
-    <ClCompile Include="Commands\source\AddMovieCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
+    <ClCompile Include="User\source\User.cpp">
+      <Filter>Source Files\User</Filter>
     </ClCompile>
-    <ClCompile Include="Commands\source\BuyTicketCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\Command.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\LoginCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\LogoutCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\RateMovieCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\RegisterCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\CloseHallCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\OpenHallCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\RemoveMovieCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\RemoveUserCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\UpdateMovieHallCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\UpdateMovieTitleCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\ListHistoryCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\ListMoviesCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\ListTicketsCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\ListUserHistoryCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\ListUsersCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\ListUserTicketsCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\PrintBalanceCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\source\PrintHallCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Commands\header\AddBalanceCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\AddMovieCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\AddScreeningCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\BuyTicketCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\CloseHallCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\Command.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\CommandFactory.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\ListHistoryCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\ListMoviesCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\ListScreeningsCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\ListTicketsCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\ListUserHistoryCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\ListUsersCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\ListUserTicketsCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\LoginCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\LogoutCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\OpenHallCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\PrintBalanceCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\RateMovieCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\RegisterCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\RemoveMovieCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\RemoveScreeningCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\RemoveUserCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\UpdateMovieTitleCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\UpdateScreeningHallCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\header\ViewScreeningHallCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\header\ActionMovie.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\header\DocumentaryMovie.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\header\DramaMovie.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\header\Hall.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\header\Movie.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\header\Screening.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\header\Ticket.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\Date.h">
+      <Filter>Header Files\Hepers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\MyString.h">
+      <Filter>Header Files\Hepers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\MyVector.hpp">
+      <Filter>Header Files\Hepers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\PolymorphicPtr.hpp">
+      <Filter>Header Files\Hepers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\Time.h">
+      <Filter>Header Files\Hepers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\TimeInterval.h">
+      <Filter>Header Files\Hepers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\header\Utilities.h">
+      <Filter>Header Files\Hepers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\header\System.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\header\SystemLauncher.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="User\header\Admin.h">
+      <Filter>Header Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="User\header\RegularUser.h">
+      <Filter>Header Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="User\header\User.h">
+      <Filter>Header Files\User</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

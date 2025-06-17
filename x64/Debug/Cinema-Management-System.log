@@ -1,6 +1,43 @@
 ﻿  AddBalanceCommand.cpp
+  AddMovieCommand.cpp
+  AddScreeningCommand.cpp
+  BuyTicketCommand.cpp
+  CloseHallCommand.cpp
+  CommandFactory.cpp
+  ListHistoryCommand.cpp
+  ListMoviesCommand.cpp
+  ListScreeningsCommand.cpp
+  ListTicketsCommand.cpp
+  ListUserHistoryCommand.cpp
+  ListUsersCommand.cpp
+  ListUserTicketsCommand.cpp
+  LoginCommand.cpp
+  LogoutCommand.cpp
+  OpenHallCommand.cpp
+  PrintBalanceCommand.cpp
+  RateMovieCommand.cpp
+  RegisterCommand.cpp
+  RemoveMovieCommand.cpp
+  Generating Code...
+  Compiling...
+  RemoveScreeningCommand.cpp
   RemoveUserCommand.cpp
+  UpdateMovieTitleCommand.cpp
+  UpdateScreeningHallCommand.cpp
+  ViewScreeningHallCommand.cpp
+  ActionMovie.cpp
+  DocumentaryMovie.cpp
+  DramaMovie.cpp
+  Hall.cpp
+  Movie.cpp
+  Screening.cpp
+  Ticket.cpp
+  Utilities.cpp
+  Main.cpp
   System.cpp
   SystemLauncher.cpp
+  Admin.cpp
+  RegularUser.cpp
+  User.cpp
   Generating Code...
   Cinema-Management-System.vcxproj -> C:\Users\Lenovo\source\repos\ООП\Cinema-Management-System\x64\Debug\Cinema-Management-System.exe

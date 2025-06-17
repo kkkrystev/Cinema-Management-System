@@ -2,19 +2,12 @@
 
 ActionMovie::ActionMovie() : Movie(), actionIntensity(0) {}
 
-ActionMovie::ActionMovie(const MyString& title, int releaseYear, int duration, int hallId,
-	const Date& screeningDate, const TimeInterval& screeningHours, unsigned actionIntensity)
-	: Movie(title, releaseYear, duration, hallId, screeningDate, screeningHours), actionIntensity(actionIntensity) {}
+ActionMovie::ActionMovie(const MyString& title, unsigned releaseYear, unsigned duration, unsigned actionIntensity)
+	: Movie(title, releaseYear, duration), actionIntensity(actionIntensity) {}
 
-void ActionMovie::printAsUpcoming() const
+void ActionMovie::print() const
 {
-	Movie::printAsUpcoming();
-	std::cout << " | ActionIntensity: " << actionIntensity;
-}
-
-void ActionMovie::printAsPast() const
-{
-	Movie::printAsPast();
+	Movie::print();
 	std::cout << " | ActionIntensity: " << actionIntensity;
 }
 

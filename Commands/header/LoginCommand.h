@@ -5,4 +5,3 @@ class LoginCommand : public Command
 {
 	void execute(System* system) const override;
 };
-

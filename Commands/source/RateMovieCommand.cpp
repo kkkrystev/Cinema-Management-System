@@ -7,10 +7,5 @@ void RateMovieCommand::execute(System* system) const
 
 	std::cin >> movieId >> rating;
 
-	try {
-		system->rateMovie(movieId, rating);
-	}
-	catch (std::exception& e) {
-		std::cout << e.what() << '\n';
-	}
+	system->rateMovie(movieId, rating);
 }

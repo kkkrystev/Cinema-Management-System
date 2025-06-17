@@ -2,22 +2,12 @@
 
 DramaMovie::DramaMovie() : Movie(), hasComedyElements(0) {}
 
-DramaMovie::DramaMovie(const MyString& title, int releaseYear, int duration,
-	int hallId, const Date& screeningDate, const TimeInterval& screeningHours, bool hasComedyElements)
-	: Movie(title, releaseYear, duration, hallId, screeningDate, screeningHours), hasComedyElements(hasComedyElements) {}
+DramaMovie::DramaMovie(const MyString& title, unsigned releaseYear, unsigned duration, bool hasComedyElements)
+	: Movie(title, releaseYear, duration), hasComedyElements(hasComedyElements) {}
 
-void DramaMovie::printAsUpcoming() const
+void DramaMovie::print() const
 {
-	Movie::printAsUpcoming();
-
-	if (hasComedyElements)
-		std::cout << " | Has comedy elements";
-	else
-		std::cout << " | Does not have comedy elements";
-}
-void DramaMovie::printAsPast() const
-{
-	Movie::printAsPast();
+	Movie::print();
 
 	if (hasComedyElements)
 		std::cout << " | Has comedy elements";

@@ -3,8 +3,12 @@
 
 int User::s_nextId = 10;
 
-User::User() : id(-1), balance(0.0) {}
+void User::setNextId(int nextId)
+{
+    s_nextId = nextId;
+}
 
+User::User() : id(-1), balance(0.0) {}
 User::User(const MyString& name, const MyString& password)
     : name(name), password(password), id(s_nextId++), balance(0.0), tickets(), catalogue() {}
 
@@ -20,25 +24,17 @@ const MyString& User::getPassword() const
 {
     return password;
 }
-
 const MyVector<Ticket>& User::getTickets() const
 {
     return tickets;
 }
-
 const MyVector<int>& User::getCatalogue() const
 {
     return catalogue;
 }
-
 double User::getBalance() const
 {
     return balance;
-}
-
-void User::setNextId(int nextId)
-{
-    s_nextId = nextId;
 }
 
 void User::saveToBinaryFile(std::ofstream& ofs) const
@@ -84,10 +80,10 @@ void User::loadFromBinaryFile(std::ifstream& ifs)
     }
 }
 
-bool User::hasTicket(int movieId) const
+bool User::hasTicket(int screeningId) const
 {
     for (size_t i = 0; i < tickets.getSize(); i++) {
-        if (tickets[i].getMovieId() == movieId) return true;
+        if (tickets[i].getScreeningId() == screeningId) return true;
     }
     return false;
 }
@@ -103,6 +99,7 @@ void User::addBalance(double sum)
 {
     balance += sum;
 }
+
 void User::buyTicket(const Ticket& ticket, double price)
 {
     if (balance < price)
@@ -111,24 +108,25 @@ void User::buyTicket(const Ticket& ticket, double price)
     tickets.push_back(ticket);
     balance -= price;
 }
-void User::returnTickets(int movieId, double price)
+void User::returnTickets(int screeningId, double price)
 {
     for (size_t i = 0; i < tickets.getSize(); ) {
-        if (tickets[i].getMovieId() == movieId) {
+        if (tickets[i].getScreeningId() == screeningId) {
             tickets.erase(i);
             addBalance(price);
         }
         else ++i;
     }
 }
-void User::removeTickets(int movieId)
+void User::removeTickets(int screeningId)
 {
     for (size_t i = 0; i < tickets.getSize(); ) {
-        if (tickets[i].getMovieId() == movieId)
+        if (tickets[i].getScreeningId() == screeningId)
             tickets.erase(i);
         else ++i;
     }
 }
+
 void User::addToCatalogue(int movieId)
 {
     removeTickets(movieId);

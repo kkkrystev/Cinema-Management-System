@@ -2,15 +2,10 @@
 
 void BuyTicketCommand::execute(System* system) const
 {
-	int movieId;
+	int screeningId;
 	size_t row, col;
 
-	std::cin >> movieId >> row >> col;
+	std::cin >> screeningId >> row >> col;
 
-	try {
-		system->buyTicket(movieId, row, col);
-	}
-	catch (std::exception& e) {
-		std::cout << e.what() << '\n';
-	}
+	system->buyTicket(screeningId, row, col);
 }

@@ -5,10 +5,9 @@ class ActionMovie : public Movie
 {
 public:
 	ActionMovie();
-	ActionMovie(const MyString& title, int releaseYear, int duration, int hallId, const Date& screeningDate, const TimeInterval& screeningHours, unsigned actionIntensity);
-	
-	void printAsUpcoming() const override;
-	void printAsPast() const override;
+	ActionMovie(const MyString& title, unsigned releaseYear, unsigned duration, unsigned actionIntensity);
+
+	void print() const override;
 
 	Movie* clone() const override;
 	Genre getGenre() const override;

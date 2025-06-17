@@ -10,10 +10,5 @@ void UpdateMovieTitleCommand::execute(System* system) const
 	std::cin.getline(buffer, 1024);
 	movieTitle = MyString(buffer);
 
-	try {
-		system->updateMovieTitle(movieId, movieTitle);
-	}
-	catch (std::exception& e) {
-		std::cout << e.what() << '\n';
-	}
+	system->updateMovieTitle(movieId, movieTitle);
 }

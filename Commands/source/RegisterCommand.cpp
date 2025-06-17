@@ -6,10 +6,5 @@ void RegisterCommand::execute(System* system) const
 
 	std::cin >> name >> password;
 
-	try {
-		system->registerUser(name, password);
-	}
-	catch (std::exception& e) {
-		std::cout << e.what() << '\n';
-	}
+	system->registerUser(name, password);
 }

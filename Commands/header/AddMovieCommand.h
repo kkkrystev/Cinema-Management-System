@@ -5,4 +5,3 @@ class AddMovieCommand : public Command
 {
 	void execute(System* system) const override;
 };
-

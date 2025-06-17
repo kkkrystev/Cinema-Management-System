@@ -2,48 +2,39 @@
 
 void AddMovieCommand::execute(System* system) const
 {
-	try {
-
 	MyString genreStr;
-	
+
 	std::cin >> genreStr;
 
 	Genre genre = stringToGenre(genreStr);
 
 	MyString title;
 	unsigned releaseYear, duration;
-	int hallId;
-	Date screeningDate;
-	Time start, end;
 	
-	std::cin >> title >> releaseYear >> duration >> hallId >> screeningDate >> start >> end;
+	std::cin >> title >> releaseYear >> duration;
 
-		if (genre == Genre::Action) {
-			unsigned actionIntensity;
+	if (genre == Genre::Action) {
+		unsigned actionIntensity;
 
-			std::cin >> actionIntensity;
+		std::cin >> actionIntensity;
 
-			system->addActionMovie(title, releaseYear, duration, hallId, screeningDate, start, end, actionIntensity);
-		}
-		else if (genre == Genre::Documentary){
-			MyString themeStr;
-			bool isBasedOnTrueEvents;
-
-			std::cin >> themeStr;
-			Theme theme = stringToTheme(themeStr);
-			std::cin >> isBasedOnTrueEvents;
-
-			system->addDocumentaryMovie(title, releaseYear, duration, hallId, screeningDate, start, end, theme, isBasedOnTrueEvents);
-		}
-		else if (genre == Genre::Drama) {
-			bool hasComedyElements;
-
-			std::cin >> hasComedyElements;
-
-			system->addDramaMovie(title, releaseYear, duration, hallId, screeningDate, start, end, hasComedyElements);
-		}
+		system->addActionMovie(title, releaseYear, duration, actionIntensity);
 	}
-	catch (std::exception& e) {
-		std::cout << e.what() << '\n';
+	else if (genre == Genre::Documentary) {
+		MyString themeStr;
+		bool isBasedOnTrueEvents;
+
+		std::cin >> themeStr;
+		Theme theme = stringToTheme(themeStr);
+		std::cin >> isBasedOnTrueEvents;
+
+		system->addDocumentaryMovie(title, releaseYear, duration, theme, isBasedOnTrueEvents);
+	}
+	else if (genre == Genre::Drama) {
+		bool hasComedyElements;
+
+		std::cin >> hasComedyElements;
+
+		system->addDramaMovie(title, releaseYear, duration, hasComedyElements);
 	}
 }

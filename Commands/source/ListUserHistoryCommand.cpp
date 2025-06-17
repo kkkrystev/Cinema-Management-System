@@ -6,10 +6,5 @@ void ListUserHistoryCommand::execute(System* system) const
 
 	std::cin >> userId;
 
-	try {
-		system->listUserHistory(userId);
-	}
-	catch (std::exception& e) {
-		std::cout << e.what() << '\n';
-	}
+	system->listUserHistory(userId);
 }

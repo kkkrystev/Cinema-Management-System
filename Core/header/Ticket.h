@@ -5,9 +5,9 @@ class Ticket
 {
 public:
 	Ticket();
-	Ticket(int movieId, size_t row, size_t col);
+	Ticket(int screeningId, size_t row, size_t col);
 
-	int getMovieId() const;
+	int getScreeningId() const;
 	size_t getRow() const;
 	size_t getCol() const;
 
@@ -15,7 +15,7 @@ public:
 	void loadFromBinaryFile(std::ifstream& ifs);
 
 private:
-	int movieId;
+	int screeningId;
 	size_t row;
 	size_t col;
 };

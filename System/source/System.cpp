@@ -93,6 +93,9 @@ void System::buyTicket(int screeningId, size_t row, size_t col)
 		throw std::logic_error("You must be logged in to perform this action.");
 
 	Screening* screening = findScreeningById(screeningId);
+	if (!screening)
+		throw std::invalid_argument("A screening with such ID does NOT exist.");
+
 	Movie* movie = findMovieById(screening->getMovieId());
 
 	if (row == 0 || col == 0)
@@ -145,7 +148,7 @@ void System::listScreenings()
 		throw std::logic_error("You must be logged in to perform this action.");
 
 	if (screenings.getSize() == 0) {
-		std::cout << "There are no upcoming screenings scheduled for the moment.\n";
+		std::cout << "There are no movies at the moment.\n";
 		return;
 	}
 
